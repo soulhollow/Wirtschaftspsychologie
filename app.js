@@ -140,6 +140,8 @@ function openModal(text) {
 
   confirmText.textContent = text;
   modal.hidden = false;
+  // Make it robust even if CSS accidentally overrides `[hidden]`
+  modal.style.display = "grid";
 
   // focus first actionable
   const ok = $("#confirmOkBtn");
@@ -148,7 +150,9 @@ function openModal(text) {
 
 function closeModal() {
   const modal = $("#confirmModal");
-  if (modal) modal.hidden = true;
+  if (!modal) return;
+  modal.hidden = true;
+  modal.style.display = "none";
 }
 
 function showLoading(show) {
@@ -156,6 +160,7 @@ function showLoading(show) {
   if (!overlay) return;
   overlay.hidden = !show;
   overlay.setAttribute("aria-hidden", show ? "false" : "true");
+  overlay.style.display = show ? "grid" : "none";
 }
 
 // -----------------------
@@ -313,6 +318,11 @@ function wait(ms) {
 // -----------------------
 function wireGlobalEvents() {
   window.addEventListener("hashchange", route);
+
+  // Defensive: ensure initial UI starts clean (no modal/overlay on load)
+  closeModal();
+  showLoading(false);
+
   route();
 
   // demo confirm on home
