@@ -1556,6 +1556,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 32px;
             margin-bottom: 48px;
+            align-items: stretch;
         }
 
         .testimonial-card {
@@ -1564,6 +1565,8 @@
             padding: 32px;
             border: 1px solid rgba(255,255,255,0.1);
             transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
         }
 
         .testimonial-card:hover {
@@ -1584,25 +1587,23 @@
             margin-bottom: 24px;
             opacity: 0.9;
             font-style: italic;
+            flex: 1;
         }
 
         .testimonial-author {
             display: flex;
             align-items: center;
             gap: 16px;
+            margin-top: auto;
         }
 
         .testimonial-avatar {
             width: 56px;
             height: 56px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--white);
+            object-fit: cover;
+            border: 2px solid var(--primary-blue);
+            flex-shrink: 0;
         }
 
         .testimonial-info h4 {
@@ -2055,7 +2056,7 @@
                 icon: "🚀",
                 featured: true,
                 trainer: {
-                    name: "Dr. Julia Hartmann",
+                    name: "Dr. Amelie Diepenthal",
                     title: "Wirtschaftspsychologin & Coach",
                     bio: "Spezialistin für hybride Arbeitsmodelle mit Promotion an der Universität Mannheim."
                 },
@@ -2202,6 +2203,12 @@
                             >
                                 Seminare
                             </button>
+                            <button 
+                                className={`nav-link ${currentPage === 'about' ? 'active' : ''}`}
+                                onClick={() => setCurrentPage('about')}
+                            >
+                                Über uns
+                            </button>
                         </div>
                         <button className="nav-cart" onClick={() => setCurrentPage('cart')}>
                             <span>🛒</span>
@@ -2301,7 +2308,7 @@
                 <div className="seminar-footer">
                     <div className="seminar-price">
                         {seminar.price}€
-                        <span className="seminar-price-suffix"> / Person</span>
+                        <span className="seminar-price-suffix"> / Person zzgl. MwSt.</span>
                     </div>
                     <button 
                         className="btn btn-primary"
@@ -2489,7 +2496,7 @@
                             <div className="booking-card">
                                 <div className="booking-price">
                                     <div className="booking-price-amount">{seminar.price}€</div>
-                                    <div className="booking-price-suffix">pro Person</div>
+                                    <div className="booking-price-suffix">pro Person zzgl. MwSt.</div>
                                     <div className="booking-price-info">inkl. Unterlagen & Verpflegung</div>
                                 </div>
 
@@ -2564,10 +2571,12 @@
         };
 
         // Cart Page
-        const CartPage = ({ cartItems, updateQuantity, removeItem, setCurrentPage }) => {
+        const CartPage = ({ cartItems, updateQuantity, removeItem, setCurrentPage, seminars = [], onAddToCart }) => {
             const [showConfirmModal, setShowConfirmModal] = useState(false);
             const [showSuccessModal, setShowSuccessModal] = useState(false);
             const [isLoading, setIsLoading] = useState(false);
+            // Standard: Seminar mit 490€ (id: 2 - Mitarbeitermotivation)
+            const [selectedSeminarId, setSelectedSeminarId] = useState(2);
             const [formData, setFormData] = useState({
                 firstName: '',
                 lastName: '',
@@ -2651,17 +2660,108 @@
                 }
             };
 
+            // Standard-Seminar finden (490€ - Mitarbeitermotivation)
+            const defaultSeminar = seminars.find(s => s.id === 2) || seminars[0];
+
             if (cartItems.length === 0) {
                 return (
                     <div className="cart-container">
-                        <div className="cart-empty animate-fade-in">
-                            <div className="cart-empty-icon">🛒</div>
-                            <h2>Ihr Warenkorb ist leer</h2>
-                            <p className="cart-empty-text">
-                                Entdecken Sie unsere Seminare und starten Sie Ihre Weiterbildung.
+                        <div className="cart-header">
+                            <h1 className="cart-title">Seminar buchen</h1>
+                            <p style={{ color: 'var(--gray-500)', marginTop: '8px' }}>
+                                Sichern Sie sich Ihren Platz für eines unserer Seminare.
                             </p>
-                            <button className="btn btn-primary" onClick={() => setCurrentPage('seminars')}>
-                                Seminare ansehen
+                        </div>
+
+                        <div className="form-section" style={{ marginBottom: '24px' }}>
+                            <h3 className="form-section-title" style={{ marginBottom: '16px' }}>
+                                <span className="form-section-number">1</span>
+                                Seminar auswählen
+                            </h3>
+                            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                                <div style={{ flex: 1, minWidth: '250px' }}>
+                                    <label className="form-label">Seminar</label>
+                                    <select 
+                                        className="form-input"
+                                        value={selectedSeminarId}
+                                        onChange={(e) => setSelectedSeminarId(Number(e.target.value))}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        {seminars.map(s => (
+                                            <option key={s.id} value={s.id}>
+                                                {s.title} – {s.price}€ zzgl. MwSt. ({s.date})
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <button 
+                                    className="btn btn-primary"
+                                    onClick={() => {
+                                        const seminar = seminars.find(s => s.id === selectedSeminarId);
+                                        if (seminar && onAddToCart) {
+                                            onAddToCart(seminar, 1);
+                                        }
+                                    }}
+                                    style={{ height: '48px', whiteSpace: 'nowrap' }}
+                                >
+                                    Seminar hinzufügen
+                                </button>
+                            </div>
+                            
+                            {/* Vorschau des ausgewählten Seminars */}
+                            {(() => {
+                                const selectedSem = seminars.find(s => s.id === selectedSeminarId);
+                                if (!selectedSem) return null;
+                                return (
+                                    <div style={{ 
+                                        marginTop: '24px', 
+                                        padding: '20px', 
+                                        background: 'var(--gray-100)', 
+                                        borderRadius: 'var(--radius-md)',
+                                        border: '1px solid var(--gray-200)'
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                            <div style={{ 
+                                                fontSize: '32px', 
+                                                width: '60px', 
+                                                height: '60px', 
+                                                background: 'var(--primary-blue)', 
+                                                borderRadius: 'var(--radius-md)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}>
+                                                {selectedSem.icon}
+                                            </div>
+                                            <div style={{ flex: 1 }}>
+                                                <h4 style={{ margin: 0, fontSize: '18px' }}>{selectedSem.title}</h4>
+                                                <p style={{ margin: '4px 0 0', color: 'var(--gray-500)', fontSize: '14px' }}>
+                                                    📅 {selectedSem.date} • ⏰ {selectedSem.time}
+                                                </p>
+                                                <p style={{ margin: '4px 0 0', color: 'var(--gray-500)', fontSize: '14px' }}>
+                                                    📍 {selectedSem.room}, {selectedSem.location}
+                                                </p>
+                                            </div>
+                                            <div style={{ textAlign: 'right' }}>
+                                                <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--primary-blue)' }}>
+                                                    {selectedSem.price}€
+                                                </div>
+                                                <div style={{ fontSize: '12px', color: 'var(--gray-500)' }}>
+                                                    pro Person zzgl. MwSt.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })()}
+                        </div>
+
+                        <div style={{ textAlign: 'center', padding: '32px 0' }}>
+                            <p style={{ color: 'var(--gray-500)' }}>
+                                Oder entdecken Sie alle verfügbaren Seminare:
+                            </p>
+                            <button className="btn btn-secondary" onClick={() => setCurrentPage('seminars')} style={{ marginTop: '12px' }}>
+                                Alle Seminare ansehen
                             </button>
                         </div>
                     </div>
@@ -2708,6 +2808,7 @@
                             <div className="cart-item-actions">
                                 <div className="cart-item-price">
                                     {(item.seminar.price * item.quantity).toLocaleString('de-DE')}€
+                                    <span style={{ fontSize: '12px', color: 'var(--gray-500)', display: 'block' }}>zzgl. MwSt.</span>
                                 </div>
                                 <span 
                                     className="cart-item-remove"
@@ -2718,6 +2819,45 @@
                             </div>
                         </div>
                     ))}
+
+                    {/* Seminar hinzufügen */}
+                    {seminars && seminars.length > 0 && (
+                        <div className="form-section" style={{ marginTop: '24px', marginBottom: '24px' }}>
+                            <h3 className="form-section-title" style={{ marginBottom: '16px' }}>
+                                <span className="form-section-number">+</span>
+                                Weiteres Seminar hinzufügen
+                            </h3>
+                            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                                <div style={{ flex: 1, minWidth: '250px' }}>
+                                    <label className="form-label">Seminar auswählen</label>
+                                    <select 
+                                        className="form-input"
+                                        value={selectedSeminarId}
+                                        onChange={(e) => setSelectedSeminarId(Number(e.target.value))}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        {seminars.map(s => (
+                                            <option key={s.id} value={s.id}>
+                                                {s.title} – {s.price}€ zzgl. MwSt. ({s.date})
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <button 
+                                    className="btn btn-secondary"
+                                    onClick={() => {
+                                        const seminar = seminars.find(s => s.id === selectedSeminarId);
+                                        if (seminar && onAddToCart) {
+                                            onAddToCart(seminar, 1);
+                                        }
+                                    }}
+                                    style={{ height: '48px', whiteSpace: 'nowrap' }}
+                                >
+                                    + Hinzufügen
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
                     <div className="cart-summary">
                         <div className="cart-summary-row">
@@ -2986,7 +3126,7 @@
                     <div className="about-grid">
                         <div className="about-card">
                             <div className="about-card-icon">🎓</div>
-                            <h3>Wissenschaftlich fundiert</h3>
+                            <h3>Wissenschaftlich</h3>
                             <p>Alle Seminare basieren auf aktuellen Erkenntnissen der Wirtschaftspsychologie und Führungsforschung.</p>
                         </div>
                         <div className="about-card">
@@ -3267,21 +3407,21 @@
                     role: "Personalleitung",
                     company: "Bosch GmbH",
                     text: "Das Seminar zur Mitarbeitermotivation hat unsere Führungskultur nachhaltig verändert. Die wissenschaftliche Fundierung kombiniert mit praktischen Übungen macht den Unterschied.",
-                    initials: "SM"
+                    image: "image copy 2.png"
                 },
                 {
                     name: "Michael Schneider",
                     role: "Geschäftsführer",
                     company: "Porsche AG",
                     text: "Exzellente Trainer, die komplexe psychologische Konzepte verständlich vermitteln. Unsere Teamleiter setzen das Gelernte direkt im Alltag um.",
-                    initials: "MS"
+                    image: "image copy.png"
                 },
                 {
                     name: "Julia Hoffmann",
                     role: "Head of HR",
                     company: "Mercedes-Benz",
                     text: "Wir buchen regelmäßig Seminare für unsere Führungskräfte. Die Qualität ist konstant hoch und das Feedback der Teilnehmer durchweg positiv.",
-                    initials: "JH"
+                    image: "image.png"
                 }
             ];
 
@@ -3302,7 +3442,7 @@
                                     <div className="testimonial-stars">★★★★★</div>
                                     <p className="testimonial-text">"{testimonial.text}"</p>
                                     <div className="testimonial-author">
-                                        <div className="testimonial-avatar">{testimonial.initials}</div>
+                                        <img className="testimonial-avatar" src={testimonial.image} alt={testimonial.name} />
                                         <div className="testimonial-info">
                                             <h4>{testimonial.name}</h4>
                                             <p>{testimonial.role}</p>
@@ -3379,6 +3519,7 @@
             const handleSelectSeminar = (seminar) => {
                 setSelectedSeminar(seminar);
                 setCurrentPage('detail');
+                window.scrollTo(0, 0);
             };
 
             const renderPage = () => {
@@ -3431,6 +3572,8 @@
                                 updateQuantity={updateQuantity}
                                 removeItem={removeItem}
                                 setCurrentPage={setCurrentPage}
+                                seminars={seminars}
+                                onAddToCart={addToCart}
                             />
                         );
                     case 'about':
