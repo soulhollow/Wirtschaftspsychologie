@@ -1,48 +1,137 @@
-Experten-Konzept: Trainings-Portal für Wirtschaftspsychologie
-Kontext: Prüfungsleistung Wirtschaftspsychologie (DHBW Stuttgart)
-Seminar-Fokus: Mitarbeitermotivation in hybriden Arbeitswelten
-Trainer-Team: Amelie Diepenthal, Florian Ruffner, Franziska Schöning
-1. Usability-Framework: Die 6 Prinzipien nach Don Norman
-Die Benutzeroberfläche (UI) ist darauf ausgelegt, die kognitive Belastung zu minimieren und eine fehlerfreie Navigation zu ermöglichen.
-PUX-Design-Prinzipien in der strategischen Anwendung
+Blueprint: Trainings-Portal für Wirtschaftspsychologie
 
-a. Affordances In der strategischen Umsetzung des Mockups werden Buttons mit einem 2px-Schatten und abgerundeten Ecken (8px) versehen. Die psychologische Wirkung besteht darin, dass die "Klickbarkeit" sofort intuitiv erfasst wird, da das Element physische Greifbarkeit suggeriert. 🖱️
+1. Usability-Framework: 6 Prinzipien nach Don Norman
 
-b. Signifiers Um die Orientierung zu erleichtern, werden Icons für den Kalender (Termin) und den Pin (Ort: Paulinenstraße 50) eingesetzt. Dies führt zu einer schnellen Informationsverarbeitung, ohne dass der Nutzer den Text explizit scannen muss. 📍
+Die Umsetzung im Frontend folgt diesen Prinzipien zur Reduktion der kognitiven Last.
 
-c. Mapping Ein Preiskalkulator (Teilnehmeranzahl x 490€) wird direkt beim Buchungs-CTA platziert. Dadurch entsteht eine direkte logische Verbindung von Handlung und Konsequenz, was die Preistransparenz erhöht. 🧮
+Prinzip
 
-d. Constraints Zur Fehlervermeidung ist der Buchungsbutton erst aktiv, wenn alle Pflichtfelder (E-Mail/Name) ausgefüllt sind. Dieser Ausschluss von Fehlbedienungen dient der effektiven "Error Prevention" im Prozess. 🚫
+Strategische Umsetzung im Mockup
 
-e. Feedback Durch eine Button-Animation (<100ms) und ein Lade-Overlay bei der Buchungsanfrage erhält der Nutzer eine unmittelbare Rückmeldung. Dies vermittelt ein Gefühl von Kontrolle und Systemstabilität. 🔄
+Psychologische Wirkung
 
-f. Conceptual Model Die Navigationsstruktur folgt dem Pfad Home → Seminare → Buchung. Dies entspricht dem gelernten Schema gängiger Buchungsportale und minimiert die kognitive Last durch bekannte Muster. 🗺️
+Affordances
 
-2. Fehlertoleranz & "Unhappy Path"
-Ein robustes UX-Design fängt Fehlentscheidungen des Nutzers aktiv ab.
-Szenario: Nutzer klickt versehentlich auf "Kostenpflichtig buchen".
-Lösung: Ein modaler Bestätigungsdialog fasst die Kerndaten zusammen: "Sie buchen 'Mitarbeitermotivation' für den 16.01.2026 zum Preis von 490€".
-Fehlermeldungen: Einsatz von positiver Rhetorik. Statt "Ungültige Eingabe!" nutzen wir "Bitte geben Sie Ihre E-Mail-Adresse ein, damit wir Ihnen die Unterlagen senden können".
-3. Wirtschaftspsychologische Trigger
-A. Priming & Halo-Effekt
-Bildsprache: Einsatz von Bildern, die Fokus (Einzelarbeit) und Synergie (Teammeeting) zeigen. Dies primt den Nutzer auf das Thema "Hybride Welten".
-Trainerprofile: Die Vorstellung von Amelie, Florian & Franziska mit akademischen Titeln nutzt den Autoritätseffekt. Ein professionelles Foto erzeugt einen positiven Halo-Effekt auf die vermittelten Inhalte.
-B. Farbpsychologie & Visuelle Hierarchie
-🔵 Blau (Primary): Fundament für Vertrauen & Seriosität. Eingesetzt für theoretische Inhalte (Herzberg-Modell).
-🟡 Gelb (Action): Signalfarbe für Problemlösung & CTA. Exklusiv für den Button "Jetzt Platz sichern".
-⚫ Schwarz (Premium): Nutzung für Headlines und Preise, um Wertigkeit zu unterstreichen.
-C. Anchoring (Ankereffekt) & Decoy
-Um das Hauptseminar (490€) attraktiv zu machen, nutzen wir das Preisgefüge:
-"Führung mit Wirkung" (520€) dient als High-Anchor.
-"Mitarbeitermotivation" (490€) wirkt dadurch preiswerter und bietet das beste Preis-Leistungs-Verhältnis.
-"Arbeitsgestaltung" (450€) dient als Einstiegsoption.
-4. Theoretische Vertiefung: Zwei-Faktor-Theorie (Herzberg)
-Auf der Detailseite des Seminars wird die psychologische Fundierung explizit dargestellt:
-Hygienefaktoren: Gestaltung der hybriden Infrastruktur (Technik, Home-Office-Pauschale).
-Motivatoren: Anerkennung und Verantwortung in Remote-Teams (Inhalt des praktischen Teils).
-Transferleistung: Das Seminar lehrt, wie Führungskräfte in hybriden Welten Motivatoren aktivieren können, wenn Hygienefaktoren räumlich distanziert sind.
-Seitenstruktur (Wireframe-Plan)
-Startseite: Hero-Sektion mit Priming-Bildern und Mission-Statement des Teams.
-Seminar-Portfolio: Tabellarischer Vergleich der 3 Kurse inkl. Preis-Anker.
-Detailseite (Motivation): Fokus auf Agenda, Raum 208 (Stuttgart), Verpflegung und die Trainer-Expertise.
-Buchungsstrecke: 2-Schritt-Prozess (Daten eingeben → Review & Feedback-Loop).
+Buttons mit 2px-Schatten & 8px abgerundeten Ecken.
+
+„Klickbarkeit“ wird sofort intuitiv erfasst.
+
+Signifiers
+
+Icons für Kalender (Termin) und Pin (Ort: Paulinenstraße 50).
+
+Schnelle Informationsverarbeitung ohne Text-Scannen.
+
+Mapping
+
+Preiskalkulator (Teilnehmeranzahl x 490€) direkt beim CTA.
+
+Logische Verbindung von Handlung und Konsequenz.
+
+Constraints
+
+Buchungsbutton erst aktiv, wenn Pflichtfelder befüllt sind.
+
+Ausschluss von Fehlbedienungen (Error Prevention).
+
+Feedback
+
+Button-Animation (<100ms) und Lade-Overlay.
+
+Gefühl von Kontrolle und Systemstabilität.
+
+Conceptual Model
+
+Navigation: Home → Seminare → Buchung.
+
+Entspricht dem gelernten Schema von Buchungsportalen.
+
+2. Visuelle Identität & Psychologische Trigger
+
+Farbpsychologie (HEX-Codes)
+
+🔵 #1E40AF (Blau): Primärfarbe für Vertrauen & Seriosität (Theorie-Inhalte).
+
+🟡 #FACC15 (Gelb): Signalfarbe für Action/CTA (Problemlösung).
+
+⚫ #111827 (Schwarz): Headlines & Preise zur Unterstreichung der Wertigkeit.
+
+Verkaufspsychologische Effekte
+
+Priming: Bildsprache zeigt Einzelarbeit (Fokus) und Teammeetings (Synergie).
+
+Halo-Effekt: Vorstellung der Trainer mit akademischen Titeln zur Nutzung der Autorität.
+
+Anchoring (Ankereffekt):
+
+High-Anchor: „Führung mit Wirkung“ (520€).
+
+Target: „Mitarbeitermotivation“ (490€) – wirkt durch den Anker preiswert.
+
+Entry: „Arbeitsgestaltung für moderne Teams“ (450€).
+
+3. Inhalts-Struktur & Seminar-Details
+
+A. Seminar-Spezifikationen (Fokus-Kurs)
+
+Thema: Mitarbeitermotivation in hybriden Arbeitswelten.
+
+Termin: 16.01.2026, 09:00 – 16:00 Uhr.
+
+Ort: Paulinenstraße 50, 70178 Stuttgart, Raum 208.
+
+Kosten: 490€ inkl. Unterlagen und Verpflegung.
+
+B. Zielgruppe & Lernziele
+
+Zielgruppe: Führungskräfte, HR-Professionals, angehende Führungskräfte.
+
+Lernziele:
+
+Methoden zur Steigerung der Motivation in Distanz-Teams.
+
+Anwendung des Zwei-Faktor-Modells (Herzberg).
+
+Optimierung der Führungskommunikation.
+
+C. Didaktik & Methoden
+
+Um den Transfer in die Praxis zu sichern, werden folgende interaktive Methoden simuliert:
+
+Interaktive Workshops: Erarbeitung von individuellen Motivationsstrategien.
+
+Gruppenarbeit: Analyse von Best-Practices in hybriden Teams.
+
+Rollenspiele: Simulation von schwierigen Feedbackgesprächen via Video-Call.
+
+D. Agenda (Detail-Plan)
+
+Grundlagen der Motivation.
+
+Herausforderungen hybrider Arbeitswelten.
+
+Führungstechniken und psychologische Motivatoren.
+
+Praktische Übungen & Fallstudien.
+
+Abschluss & Q&A.
+
+4. Theoretische Vertiefung: Herzberg-Modell
+
+Auf der Detailseite wird die psychologische Fundierung explizit für den Nutzer aufbereitet:
+
+Hygienefaktoren: Gestaltung der Infrastruktur (Technik, Home-Office-Pauschale).
+
+Motivatoren: Anerkennung und Verantwortung (Inhalt des praktischen Seminarteils).
+
+Transfer: Wie aktiviere ich Motivatoren, wenn Hygienefaktoren räumlich distanziert sind?
+
+5. Technische Spezifikation (Frontend-Mockup)
+
+Architektur: Single-File React-App (expert level).
+
+State Management: Simuliertes Routing via useState, lokaler Warenkorb-State.
+
+Fehlertoleranz: Modaler Bestätigungsdialog vor „Kostenpflichtig buchen“.
+
+Rhetorik: Positive Fehlermeldungen (z.B. „Bitte geben Sie Ihre E-Mail ein, damit wir Ihnen die Unterlagen senden können“).

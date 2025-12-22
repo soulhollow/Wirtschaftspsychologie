@@ -1,641 +1,3481 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trainings-Portal Wirtschaftspsychologie</title>
-    <meta
-      name="description"
-      content="Mockup-Portal: Seminare, Detailseite und Buchungsstrecke (Frontend-only, Funktionen simuliert)."
-    />
-    <link rel="stylesheet" href="./styles.css?v=2" />
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wirtschaftspsychologie Akademie | Seminare & Trainings</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1E40AF;
+            --primary-blue-light: #3B5DC9;
+            --primary-blue-dark: #152D7A;
+            --accent-yellow: #FACC15;
+            --accent-yellow-light: #FDE047;
+            --accent-yellow-dark: #EAB308;
+            --black: #111827;
+            --gray-900: #1F2937;
+            --gray-700: #374151;
+            --gray-500: #6B7280;
+            --gray-300: #D1D5DB;
+            --gray-100: #F3F4F6;
+            --white: #FFFFFF;
+            --success: #10B981;
+            --error: #EF4444;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Source Sans 3', -apple-system, sans-serif;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 12px rgba(0,0,0,0.15);
+            --shadow-xl: 0 8px 24px rgba(0,0,0,0.2);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
 
-    <header class="topbar">
-      <div class="container topbar__inner">
-        <div class="brand" role="banner">
-          <div class="brand__mark" aria-hidden="true">WP</div>
-          <div class="brand__text">
-            <div class="brand__title">Wirtschaftspsychologie</div>
-            <div class="brand__subtitle">Trainings-Portal (Mockup)</div>
-          </div>
-        </div>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        <nav class="nav" aria-label="Hauptnavigation">
-          <a class="nav__link" href="#/home" data-route="home">Home</a>
-          <a class="nav__link" href="#/seminare" data-route="seminare">Seminare</a>
-          <a class="nav__link nav__cta" href="#/buchung" data-route="buchung"
-            >Jetzt Platz sichern</a
-          >
-        </nav>
-      </div>
-    </header>
+        body {
+            font-family: var(--font-body);
+            color: var(--black);
+            line-height: 1.6;
+            background: var(--gray-100);
+            min-height: 100vh;
+        }
 
-    <main id="main" class="main" tabindex="-1">
-      <div class="container">
-        <section id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></section>
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        <!-- HOME -->
-        <section id="view-home" class="view" data-view="home">
-          <div class="hero">
-            <div class="hero__content">
-              <div class="pill">Seminar-Fokus: Mitarbeitermotivation in hybriden Arbeitswelten</div>
-              <h1 class="h1">
-                Motivation, die bleibt — <span class="accent">hybrid</span> gedacht, praktisch gemacht.
-              </h1>
-              <p class="lead">
-                Frontend-Mockup für eure Prüfungsleistung (DHBW Stuttgart). Alle Funktionen sind
-                simuliert — keine echten Buchungen.
-              </p>
-              <div class="hero__actions">
-                <a class="btn btn--primary" href="#/seminare">Seminare ansehen</a>
-                <a class="btn btn--ghost" href="#/buchung">Buchung testen</a>
-              </div>
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
 
-              <div class="stats" aria-label="Kurzübersicht">
-                <div class="stat">
-                  <div class="stat__k">3</div>
-                  <div class="stat__v">Kurse im Portfolio</div>
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.4s ease-out forwards;
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.02);
+        }
+
+        .nav-logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 18px;
+            font-family: var(--font-display);
+        }
+
+        .nav-logo-text {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            font-family: var(--font-body);
+        }
+
+        .nav-link:hover {
+            background: var(--gray-100);
+            color: var(--primary-blue);
+        }
+
+        .nav-link.active {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .nav-cart {
+            position: relative;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            background: var(--accent-yellow);
+            color: var(--black);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            box-shadow: 0 2px 0 var(--accent-yellow-dark);
+        }
+
+        .nav-cart:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 0 var(--accent-yellow-dark);
+        }
+
+        .nav-cart:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 0 var(--accent-yellow-dark);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: var(--primary-blue);
+            color: var(--white);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--white);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 50%, #0F172A 100%);
+            color: var(--white);
+            padding: 80px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(250,204,21,0.15) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 24px;
+        }
+
+        .hero-title span {
+            color: var(--accent-yellow);
+        }
+
+        .hero-text {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            max-width: 500px;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .hero-stat {
+            text-align: left;
+        }
+
+        .hero-stat-number {
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-yellow);
+        }
+
+        .hero-stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        .hero-visual {
+            animation: fadeIn 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            color: var(--black);
+            box-shadow: var(--shadow-xl);
+            transform: rotate(2deg);
+            transition: transform 0.3s;
+        }
+
+        .hero-card:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .hero-card-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, var(--accent-yellow-dark) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .hero-card-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .hero-card-text {
+            color: var(--gray-500);
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        .hero-card-meta {
+            display: flex;
+            gap: 16px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .hero-card-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: none;
+            font-family: var(--font-body);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-yellow);
+            color: var(--black);
+            box-shadow: 0 2px 0 var(--accent-yellow-dark);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-yellow-light);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 0 var(--accent-yellow-dark);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            box-shadow: 0 2px 0 var(--primary-blue-dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: none;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-loading {
+            position: relative;
+            color: transparent !important;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--white);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--gray-500);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Seminar Cards */
+        .seminars-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .seminar-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s;
+            cursor: pointer;
+            animation: fadeIn 0.5s ease-out backwards;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .seminar-card:nth-child(1) { animation-delay: 0.1s; }
+        .seminar-card:nth-child(2) { animation-delay: 0.2s; }
+        .seminar-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .seminar-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .seminar-card.featured {
+            border: 3px solid var(--accent-yellow);
+            position: relative;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.4), 0 0 40px rgba(250, 204, 21, 0.2), var(--shadow-xl);
+            z-index: 10;
+            animation: cardGlow 2s ease-in-out infinite;
+            overflow: visible;
+        }
+
+        .seminar-card.featured:hover {
+            transform: scale(1.08);
+        }
+
+        .seminar-card.featured::before {
+            content: '⭐ Bestseller';
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, var(--accent-yellow-dark) 100%);
+            color: var(--black);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            z-index: 2;
+            box-shadow: var(--shadow-md);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes cardGlow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(250, 204, 21, 0.4), 0 0 40px rgba(250, 204, 21, 0.2), var(--shadow-xl);
+                border-color: var(--accent-yellow);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(250, 204, 21, 0.6), 0 0 60px rgba(250, 204, 21, 0.3), var(--shadow-xl);
+                border-color: var(--accent-yellow-light);
+            }
+        }
+
+        .seminar-card.featured .seminar-footer {
+            background: var(--accent-yellow);
+        }
+
+        .seminar-card.featured .seminar-price {
+            color: var(--black);
+        }
+
+        .seminar-image {
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .seminar-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.3));
+        }
+
+        .seminar-content {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .seminar-category {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .seminar-title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .seminar-description {
+            font-size: 15px;
+            color: var(--gray-500);
+            margin-bottom: 16px;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .seminar-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .seminar-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .seminar-meta-icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+        }
+
+        .seminar-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            background: var(--gray-100);
+        }
+
+        .seminar-price {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .seminar-price-suffix {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--gray-500);
+        }
+
+        /* Detail Page */
+        .detail-hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            color: var(--white);
+            padding: 60px 24px;
+        }
+
+        .detail-hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb-link {
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .breadcrumb-link:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .detail-title {
+            font-family: var(--font-display);
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .detail-subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            max-width: 700px;
+        }
+
+        .detail-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 48px;
+        }
+
+        .detail-main {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .detail-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .detail-section-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .detail-section-title-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-blue);
+            color: var(--white);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .detail-list {
+            list-style: none;
+        }
+
+        .detail-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .detail-list li:last-child {
+            border-bottom: none;
+        }
+
+        .detail-list-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .agenda-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .agenda-item:last-child {
+            border-bottom: none;
+        }
+
+        .agenda-time {
+            font-weight: 600;
+            color: var(--primary-blue);
+            min-width: 100px;
+        }
+
+        .agenda-content h4 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .agenda-content p {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* Sidebar */
+        .detail-sidebar {
+            animation: fadeIn 0.5s ease-out 0.2s backwards;
+        }
+
+        .booking-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 96px;
+        }
+
+        .booking-price {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .booking-price-amount {
+            font-family: var(--font-display);
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .booking-price-suffix {
+            font-size: 16px;
+            color: var(--gray-500);
+        }
+
+        .booking-price-info {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .booking-details {
+            background: var(--gray-100);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .booking-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        .booking-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .booking-detail-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--primary-blue);
+        }
+
+        .booking-detail-text {
+            font-size: 14px;
+        }
+
+        .booking-detail-label {
+            color: var(--gray-500);
+            display: block;
+            font-size: 12px;
+        }
+
+        .calculator {
+            background: var(--gray-100);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .calculator-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .calculator-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .calculator-input {
+            width: 80px;
+            padding: 10px 12px;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            font-family: var(--font-body);
+            transition: border-color 0.2s;
+        }
+
+        .calculator-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .calculator-result {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .booking-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+        }
+
+        .booking-note {
+            text-align: center;
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 16px;
+        }
+
+        /* Cart Page */
+        .cart-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        .cart-header {
+            margin-bottom: 32px;
+        }
+
+        .cart-title {
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 80px 24px;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .cart-empty-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+            opacity: 0.3;
+        }
+
+        .cart-empty-text {
+            font-size: 18px;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .cart-item {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: 24px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .cart-item-image {
+            width: 120px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .cart-item-content {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cart-item-meta {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-sm);
+            background: var(--white);
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .quantity-btn:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .quantity-value {
+            font-weight: 600;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .cart-item-price {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .cart-item-remove {
+            color: var(--error);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .cart-item-remove:hover {
+            opacity: 0.7;
+        }
+
+        .cart-summary {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            margin-top: 32px;
+        }
+
+        .cart-summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .cart-summary-row:last-of-type {
+            border-bottom: none;
+            padding-top: 16px;
+            margin-top: 8px;
+            border-top: 2px solid var(--black);
+        }
+
+        .cart-summary-label {
+            color: var(--gray-500);
+        }
+
+        .cart-summary-value {
+            font-weight: 600;
+        }
+
+        .cart-summary-total {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        /* Checkout Form */
+        .checkout-form {
+            margin-top: 32px;
+        }
+
+        .form-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .form-section-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-section-number {
+            width: 28px;
+            height: 28px;
+            background: var(--primary-blue);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+        }
+
+        .form-label .required {
+            color: var(--error);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-family: var(--font-body);
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .form-input.error {
+            border-color: var(--error);
+        }
+
+        .form-error {
+            color: var(--error);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .form-hint {
+            color: var(--gray-500);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease-out;
+            padding: 24px;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            max-width: 480px;
+            width: 100%;
+            padding: 32px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 20px;
+        }
+
+        .modal-icon.warning {
+            background: rgba(250, 204, 21, 0.2);
+        }
+
+        .modal-icon.success {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .modal-text {
+            text-align: center;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--black);
+            color: var(--white);
+            padding: 16px 24px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-xl);
+            animation: slideIn 0.3s ease-out;
+            z-index: 1001;
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--error);
+        }
+
+        /* Herzberg Model Section */
+        .herzberg-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .herzberg-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .herzberg-card {
+            padding: 24px;
+            border-radius: var(--radius-md);
+        }
+
+        .herzberg-card.hygiene {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+        }
+
+        .herzberg-card.motivators {
+            background: linear-gradient(135deg, #DBEAFE 0%, #93C5FD 100%);
+        }
+
+        .herzberg-card-title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .herzberg-card-list {
+            list-style: none;
+        }
+
+        .herzberg-card-list li {
+            padding: 8px 0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 16px;
+            font-weight: 500;
+            color: var(--gray-500);
+        }
+
+        /* Trainer Section */
+        .trainer-card {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: var(--gray-100);
+            border-radius: var(--radius-md);
+            margin-top: 16px;
+        }
+
+        .trainer-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 28px;
+            font-family: var(--font-display);
+            flex-shrink: 0;
+        }
+
+        .trainer-info h4 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .trainer-info .title {
+            color: var(--primary-blue);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .trainer-info p {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text {
+                margin: 0 auto 32px;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .seminars-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .detail-content {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-sidebar {
+                order: -1;
+            }
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: var(--white);
+            padding: 80px 24px;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--gray-200);
+            padding: 24px 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--black);
+            gap: 16px;
+        }
+
+        .faq-question:hover {
+            color: var(--primary-blue);
+        }
+
+        .faq-toggle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--gray-500);
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .faq-item.open .faq-toggle {
+            background: var(--primary-blue);
+            color: var(--white);
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+            padding-top: 16px;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            background: linear-gradient(135deg, var(--gray-900) 0%, var(--black) 100%);
+            padding: 80px 24px;
+            color: var(--white);
+        }
+
+        .testimonials-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonials-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .testimonials-header h2 {
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .testimonials-header p {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .testimonial-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-4px);
+        }
+
+        .testimonial-stars {
+            color: var(--accent-yellow);
+            font-size: 18px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+
+        .testimonial-text {
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .testimonial-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .testimonial-info h4 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .testimonial-info p {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .testimonial-company {
+            color: var(--accent-yellow);
+            font-weight: 500;
+        }
+
+        .client-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            flex-wrap: wrap;
+        }
+
+        .client-logo {
+            font-size: 20px;
+            font-weight: 700;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+            font-family: var(--font-display);
+        }
+
+        .client-logo:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 1024px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .client-logos {
+                gap: 32px;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-900);
+            color: var(--white);
+            padding: 60px 24px 24px;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-blue);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .footer-logo-text {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .footer-description {
+            color: var(--gray-300);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-social-link {
+            width: 36px;
+            height: 36px;
+            background: var(--gray-700);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .footer-social-link:hover {
+            background: var(--primary-blue);
+        }
+
+        .footer-column h4 {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-link {
+            color: var(--gray-300);
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+            font-family: var(--font-body);
+        }
+
+        .footer-link:hover {
+            color: var(--accent-yellow);
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            color: var(--gray-300);
+            font-size: 14px;
+        }
+
+        .footer-contact-icon {
+            color: var(--accent-yellow);
+            flex-shrink: 0;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--gray-700);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-copyright {
+            color: var(--gray-500);
+            font-size: 13px;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-legal-link {
+            color: var(--gray-500);
+            font-size: 13px;
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+            font-family: var(--font-body);
+        }
+
+        .footer-legal-link:hover {
+            color: var(--white);
+        }
+
+        /* Legal Pages */
+        .legal-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        .legal-page h1 {
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 32px;
+        }
+
+        .legal-page h2 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+
+        .legal-page p {
+            margin-bottom: 16px;
+            color: var(--gray-700);
+            line-height: 1.7;
+        }
+
+        .legal-page ul {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .legal-page li {
+            margin-bottom: 8px;
+            color: var(--gray-700);
+        }
+
+        .legal-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* About Page */
+        .about-hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            color: var(--white);
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        .about-hero h1 {
+            font-family: var(--font-display);
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .about-hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .about-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+
+        .about-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .about-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .about-card-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--accent-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 20px;
+        }
+
+        .about-card h3 {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .about-card p {
+            color: var(--gray-500);
+            font-size: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 16px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 48px 16px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .seminars-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 48px 16px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .cart-item {
+                flex-direction: column;
+            }
+
+            .cart-item-image {
+                width: 100%;
+                height: 120px;
+            }
+
+            .cart-item-actions {
+                flex-direction: row;
+                width: 100%;
+                margin-top: 16px;
+            }
+
+            .herzberg-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        // Seminar Data with Anchoring Effect
+        const seminars = [
+            {
+                id: 1,
+                title: "Führung mit Wirkung",
+                subtitle: "Leadership Excellence Programm",
+                description: "Entwickeln Sie Ihren authentischen Führungsstil und lernen Sie, Teams zu inspirieren und nachhaltig zu motivieren.",
+                category: "Leadership",
+                price: 520,
+                date: "23.01.2026",
+                time: "09:00 – 17:00 Uhr",
+                location: "Paulinenstraße 50, 70178 Stuttgart",
+                room: "Raum 305",
+                icon: "👑",
+                trainer: {
+                    name: "Prof. Dr. Marcus Weber",
+                    title: "Professor für Organisationspsychologie",
+                    bio: "20 Jahre Erfahrung in der Führungskräfteentwicklung bei DAX-Unternehmen."
+                },
+                highlights: [
+                    "Transformationale Führung verstehen und anwenden",
+                    "Emotionale Intelligenz in der Führung",
+                    "Change Management Strategien",
+                    "Konfliktmanagement auf Führungsebene"
+                ]
+            },
+            {
+                id: 2,
+                title: "Mitarbeitermotivation in hybriden Arbeitswelten",
+                subtitle: "Der Schlüssel zu engagierten Teams",
+                description: "Erfahren Sie, wie Sie die Motivation Ihrer Mitarbeiter auch über Distanz hinweg steigern und nachhaltig aufrechterhalten können.",
+                category: "Motivation",
+                price: 490,
+                date: "16.01.2026",
+                time: "09:00 – 16:00 Uhr",
+                location: "Paulinenstraße 50, 70178 Stuttgart",
+                room: "Raum 208",
+                icon: "🚀",
+                featured: true,
+                trainer: {
+                    name: "Dr. Julia Hartmann",
+                    title: "Wirtschaftspsychologin & Coach",
+                    bio: "Spezialistin für hybride Arbeitsmodelle mit Promotion an der Universität Mannheim."
+                },
+                highlights: [
+                    "Methoden zur Steigerung der Motivation in Distanz-Teams",
+                    "Anwendung des Zwei-Faktor-Modells (Herzberg)",
+                    "Optimierung der Führungskommunikation",
+                    "Best Practices für hybride Teamführung"
+                ],
+                agenda: [
+                    { time: "09:00", title: "Grundlagen der Motivation", desc: "Theoretische Fundierung & aktuelle Forschung" },
+                    { time: "10:30", title: "Herausforderungen hybrider Arbeitswelten", desc: "Analyse typischer Problemstellungen" },
+                    { time: "12:00", title: "Mittagspause", desc: "Networking & Austausch" },
+                    { time: "13:00", title: "Führungstechniken & Motivatoren", desc: "Herzberg-Modell in der Praxis" },
+                    { time: "14:30", title: "Praktische Übungen", desc: "Fallstudien & Rollenspiele" },
+                    { time: "15:30", title: "Abschluss & Q&A", desc: "Transfer in den Arbeitsalltag" }
+                ],
+                methods: [
+                    "Interaktive Workshops",
+                    "Gruppenarbeit & Best-Practice-Analyse",
+                    "Rollenspiele für Feedbackgespräche",
+                    "Fallstudien aus der Praxis"
+                ]
+            },
+            {
+                id: 3,
+                title: "Arbeitsgestaltung für moderne Teams",
+                subtitle: "New Work in der Praxis",
+                description: "Gestalten Sie Arbeitsplätze und -prozesse so, dass sie Produktivität und Wohlbefinden gleichermaßen fördern.",
+                category: "New Work",
+                price: 450,
+                date: "30.01.2026",
+                time: "09:00 – 15:00 Uhr",
+                location: "Paulinenstraße 50, 70178 Stuttgart",
+                room: "Raum 112",
+                icon: "💡",
+                trainer: {
+                    name: "Dr. Thomas Richter",
+                    title: "Arbeits- und Organisationspsychologe",
+                    bio: "Berater für Arbeitsplatzgestaltung bei internationalen Konzernen."
+                },
+                highlights: [
+                    "Ergonomische und psychologische Arbeitsplatzgestaltung",
+                    "Flexible Arbeitsmodelle implementieren",
+                    "Work-Life-Balance fördern",
+                    "Produktivität durch bessere Strukturen"
+                ]
+            }
+        ];
+
+        // Toast Component
+        const Toast = ({ message, type, onClose }) => {
+            useEffect(() => {
+                const timer = setTimeout(onClose, 3000);
+                return () => clearTimeout(timer);
+            }, [onClose]);
+
+            return (
+                <div className={`toast ${type}`}>
+                    <span>{type === 'success' ? '✓' : '!'}</span>
+                    <span>{message}</span>
                 </div>
-                <div class="stat">
-                  <div class="stat__k">490€</div>
-                  <div class="stat__v">Best-Value (Anker)</div>
-                </div>
-                <div class="stat">
-                  <div class="stat__k">2</div>
-                  <div class="stat__v">Schritte bis „Buchen“</div>
-                </div>
-              </div>
+            );
+        };
+
+        // Loading Overlay
+        const LoadingOverlay = ({ text }) => (
+            <div className="loading-overlay">
+                <div className="loading-spinner"></div>
+                <div className="loading-text">{text}</div>
             </div>
+        );
 
-            <div class="hero__visual" aria-hidden="true">
-              <div class="visual-card visual-card--focus">
-                <div class="visual-card__title">Fokus</div>
-                <div class="visual-card__desc">Deep Work & Klarheit</div>
-                <div class="sparkline"></div>
-              </div>
-              <div class="visual-card visual-card--synergy">
-                <div class="visual-card__title">Synergie</div>
-                <div class="visual-card__desc">Teammeeting & Alignment</div>
-                <div class="avatars">
-                  <span class="avatar"></span><span class="avatar"></span><span class="avatar"></span>
-                </div>
-              </div>
-              <div class="visual-note">
-                Priming: Bildsprache „Fokus + Synergie“ → Thema hybride Welten.
-              </div>
-            </div>
-          </div>
+        // Confirmation Modal
+        const ConfirmModal = ({ isOpen, onClose, onConfirm, total }) => {
+            if (!isOpen) return null;
 
-          <div class="grid-2">
-            <section class="card">
-              <h2 class="h2">Usability: 6 Prinzipien (Don Norman)</h2>
-              <div class="list">
-                <div class="list__item">
-                  <div class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M7 10.5 10 7.5c.7-.7 1.8-.7 2.5 0l3.5 3.5c.7.7.7 1.8 0 2.5l-3 3"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M9.5 16.5H8.2c-1.2 0-2.2-1-2.2-2.2V13"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <div class="list__title">Affordances</div>
-                    <div class="muted">Buttons wirken „klickbar“ (Schatten, Radius 8px).</div>
-                  </div>
-                </div>
-                <div class="list__item">
-                  <div class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M12 21s7-4.4 7-11a7 7 0 1 0-14 0c0 6.6 7 11 7 11Z"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <div class="list__title">Signifiers</div>
-                    <div class="muted">Icons für Termin & Ort reduzieren Scanning.</div>
-                  </div>
-                </div>
-                <div class="list__item">
-                  <div class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M4 7h16M7 4v6M17 4v6M6 12h12v8H6v-8Z"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                      />
-                      <path
-                        d="M9 15h2M13 15h2M9 18h2M13 18h2"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <div class="list__title">Mapping</div>
-                    <div class="muted">Preisrechner direkt am Buchungs-CTA.</div>
-                  </div>
-                </div>
-              </div>
-              <div class="callout">
-                <strong>Konzeptmodell:</strong> Navigation folgt dem gelernten Schema
-                <span class="mono">Home → Seminare → Buchung</span>.
-              </div>
-            </section>
-
-            <section class="card">
-              <h2 class="h2">Trainer-Team</h2>
-              <div class="team">
-                <article class="person">
-                  <div class="person__photo" aria-hidden="true"></div>
-                  <div class="person__meta">
-                    <div class="person__name">Amelie Diepenthal</div>
-                    <div class="person__role muted">Trainerin · Autoritätseffekt</div>
-                  </div>
-                </article>
-                <article class="person">
-                  <div class="person__photo person__photo--alt" aria-hidden="true"></div>
-                  <div class="person__meta">
-                    <div class="person__name">Florian Ruffner</div>
-                    <div class="person__role muted">Trainer · Halo-Effekt</div>
-                  </div>
-                </article>
-                <article class="person">
-                  <div class="person__photo person__photo--alt2" aria-hidden="true"></div>
-                  <div class="person__meta">
-                    <div class="person__name">Franziska Schöning</div>
-                    <div class="person__role muted">Trainerin · Praxisfokus</div>
-                  </div>
-                </article>
-              </div>
-
-              <div class="unhappy">
-                <h3 class="h3">Fehlertoleranz („Unhappy Path“)</h3>
-                <p class="muted">
-                  Versehentlich „Kostenpflichtig buchen“? Wir zeigen einen
-                  <strong>Bestätigungsdialog</strong> mit Kerndaten statt harter Fehlermeldungen.
-                </p>
-                <div class="mini-preview">
-                  <button class="btn btn--danger" type="button" id="demoConfirmBtn">
-                    Kostenpflichtig buchen
-                  </button>
-                  <div class="mini-preview__hint muted">
-                    Demo: Öffnet das Modal (keine echte Buchung).
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
-        </section>
-
-        <!-- SEMINARE -->
-        <section id="view-seminare" class="view" data-view="seminare" hidden>
-          <div class="page-head">
-            <h1 class="h1">Seminar-Portfolio</h1>
-            <p class="muted">
-              Preisgefüge mit Anker/Decoy: <strong>490€</strong> als Best-Value, 520€ als High-Anchor,
-              450€ als Einstieg.
-            </p>
-          </div>
-
-          <div class="portfolio">
-            <article class="course course--highlight" data-course="motivation">
-              <div class="course__top">
-                <div class="course__title">Mitarbeitermotivation (hybrid)</div>
-                <div class="tag tag--best">Best-Value</div>
-              </div>
-              <div class="course__meta">
-                <span class="meta">
-                  <span class="meta__icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M7 4v3M17 4v3M4 9h16M6 12h4M6 16h6"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                      />
-                      <path
-                        d="M5.5 7.5h13c.8 0 1.5.7 1.5 1.5v10c0 .8-.7 1.5-1.5 1.5h-13C4.7 20.5 4 19.8 4 19V9c0-.8.7-1.5 1.5-1.5Z"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                      />
-                    </svg>
-                  </span>
-                  <span>16.01.2026</span>
-                </span>
-                <span class="meta">
-                  <span class="meta__icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M12 21s7-4.4 7-11a7 7 0 1 0-14 0c0 6.6 7 11 7 11Z"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                      />
-                    </svg>
-                  </span>
-                  <span>Paulinenstraße 50 · Raum 208 · Stuttgart</span>
-                </span>
-              </div>
-              <div class="course__bottom">
-                <div class="price">
-                  <div class="price__value">490€</div>
-                  <div class="price__hint muted">pro Teilnehmer</div>
-                </div>
-                <div class="course__actions">
-                  <a class="btn btn--ghost" href="#/detail/motivation">Details</a>
-                  <a class="btn btn--primary" href="#/buchung?course=motivation">Buchen testen</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="course" data-course="fuehrung">
-              <div class="course__top">
-                <div class="course__title">Führung mit Wirkung</div>
-                <div class="tag">High-Anchor</div>
-              </div>
-              <p class="muted">
-                Dient als „High-Anchor“ (520€) — macht 490€ attraktiver.
-              </p>
-              <div class="course__bottom">
-                <div class="price">
-                  <div class="price__value">520€</div>
-                  <div class="price__hint muted">pro Teilnehmer</div>
-                </div>
-                <div class="course__actions">
-                  <button class="btn btn--ghost" type="button" data-toast="Demo: Detailseite nur für Motivation.">
-                    Details
-                  </button>
-                  <a class="btn btn--primary" href="#/buchung?course=fuehrung">Buchen testen</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="course" data-course="gestaltung">
-              <div class="course__top">
-                <div class="course__title">Arbeitsgestaltung</div>
-                <div class="tag tag--light">Einstieg</div>
-              </div>
-              <p class="muted">Einstiegsoption (450€) als Decoy für Preiswahrnehmung.</p>
-              <div class="course__bottom">
-                <div class="price">
-                  <div class="price__value">450€</div>
-                  <div class="price__hint muted">pro Teilnehmer</div>
-                </div>
-                <div class="course__actions">
-                  <button class="btn btn--ghost" type="button" data-toast="Demo: Detailseite nur für Motivation.">
-                    Details
-                  </button>
-                  <a class="btn btn--primary" href="#/buchung?course=gestaltung">Buchen testen</a>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="card card--subtle">
-            <div class="grid-2 grid-2--tight">
-              <div>
-                <h2 class="h2">Farbpsychologie</h2>
-                <ul class="bullets">
-                  <li><strong>Blau</strong>: Vertrauen & Seriosität (Theorie).</li>
-                  <li><strong>Gelb</strong>: Aktion/CTA (Problemlösung).</li>
-                  <li><strong>Schwarz</strong>: Wertigkeit (Headlines/Preis).</li>
-                </ul>
-              </div>
-              <div>
-                <h2 class="h2">Hinweis</h2>
-                <p class="muted">
-                  Dieses Mockup arbeitet vollständig ohne Backend. Formulareingaben werden nur lokal
-                  validiert und „Buchungen“ per Animation/Overlay simuliert.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- DETAIL -->
-        <section id="view-detail-motivation" class="view" data-view="detail-motivation" hidden>
-          <div class="page-head">
-            <div class="breadcrumbs">
-              <a href="#/home">Home</a>
-              <span aria-hidden="true">/</span>
-              <a href="#/seminare">Seminare</a>
-              <span aria-hidden="true">/</span>
-              <span>Detail</span>
-            </div>
-            <h1 class="h1">Mitarbeitermotivation in hybriden Arbeitswelten</h1>
-            <p class="muted">
-              Psychologisch fundiert, praxisnah umgesetzt — mit Fokus auf Herzbergs Zwei‑Faktor‑Theorie.
-            </p>
-          </div>
-
-          <div class="detail">
-            <section class="card">
-              <h2 class="h2">Agenda (Auszug)</h2>
-              <ol class="steps">
-                <li>
-                  <div class="steps__title">Warm-up: Priming & Erwartung</div>
-                  <div class="muted">Bildsprache „Fokus + Synergie“, Zielbild hybrider Zusammenarbeit.</div>
-                </li>
-                <li>
-                  <div class="steps__title">Theorie: Herzberg</div>
-                  <div class="muted">Hygienefaktoren vs. Motivatoren — was hält wirklich langfristig?</div>
-                </li>
-                <li>
-                  <div class="steps__title">Praxis: Remote-Motivatoren aktivieren</div>
-                  <div class="muted">Anerkennung, Verantwortung, Autonomie — in Distanz wirksam gestalten.</div>
-                </li>
-              </ol>
-            </section>
-
-            <section class="card">
-              <h2 class="h2">Ort & Termin</h2>
-              <div class="kv">
-                <div class="kv__row">
-                  <div class="kv__k">Termin</div>
-                  <div class="kv__v">16.01.2026</div>
-                </div>
-                <div class="kv__row">
-                  <div class="kv__k">Ort</div>
-                  <div class="kv__v">Paulinenstraße 50, Stuttgart</div>
-                </div>
-                <div class="kv__row">
-                  <div class="kv__k">Raum</div>
-                  <div class="kv__v">208</div>
-                </div>
-                <div class="kv__row">
-                  <div class="kv__k">Preis</div>
-                  <div class="kv__v"><strong>490€</strong> pro Teilnehmer</div>
-                </div>
-              </div>
-              <div class="detail__actions">
-                <a class="btn btn--primary" href="#/buchung?course=motivation">Buchung starten</a>
-                <a class="btn btn--ghost" href="#/seminare">Zurück zum Portfolio</a>
-              </div>
-            </section>
-
-            <section class="card">
-              <h2 class="h2">Herzberg: Zwei‑Faktor‑Theorie</h2>
-              <div class="grid-2 grid-2--tight">
-                <div class="subcard">
-                  <div class="subcard__title">Hygienefaktoren</div>
-                  <ul class="bullets">
-                    <li>Technik & Infrastruktur (hybrid).</li>
-                    <li>Home‑Office‑Pauschale / Rahmenbedingungen.</li>
-                  </ul>
-                  <p class="muted">
-                    Verhindern Unzufriedenheit — motivieren aber nicht automatisch.
-                  </p>
-                </div>
-                <div class="subcard">
-                  <div class="subcard__title">Motivatoren</div>
-                  <ul class="bullets">
-                    <li>Anerkennung & Feedback.</li>
-                    <li>Verantwortung, Autonomie, Sinn.</li>
-                  </ul>
-                  <p class="muted">
-                    Erzeugen echte Zufriedenheit — besonders wichtig in Remote-Teams.
-                  </p>
-                </div>
-              </div>
-              <div class="callout">
-                <strong>Transferleistung:</strong> Führungskräfte lernen, Motivatoren aktiv zu gestalten,
-                wenn Hygienefaktoren räumlich distanziert sind.
-              </div>
-            </section>
-          </div>
-        </section>
-
-        <!-- BUCHUNG -->
-        <section id="view-buchung" class="view" data-view="buchung" hidden>
-          <div class="page-head">
-            <h1 class="h1">Buchung</h1>
-            <p class="muted">2‑Schritt‑Prozess: Daten eingeben → Review & Bestätigung (simuliert).</p>
-          </div>
-
-          <div class="booking">
-            <aside class="card booking__side">
-              <h2 class="h2">Preisrechner</h2>
-              <div class="field">
-                <label class="label" for="courseSelect">Seminar</label>
-                <select id="courseSelect" class="input">
-                  <option value="motivation">Mitarbeitermotivation (490€)</option>
-                  <option value="fuehrung">Führung mit Wirkung (520€)</option>
-                  <option value="gestaltung">Arbeitsgestaltung (450€)</option>
-                </select>
-              </div>
-              <div class="field">
-                <label class="label" for="participants">Teilnehmeranzahl</label>
-                <div class="stepper">
-                  <button class="stepper__btn" type="button" id="decParticipants" aria-label="Teilnehmer reduzieren">−</button>
-                  <input
-                    id="participants"
-                    class="input input--center"
-                    type="number"
-                    min="1"
-                    max="30"
-                    value="1"
-                    inputmode="numeric"
-                    aria-describedby="participantsHint"
-                  />
-                  <button class="stepper__btn" type="button" id="incParticipants" aria-label="Teilnehmer erhöhen">+</button>
-                </div>
-                <div id="participantsHint" class="hint muted">Mapping: Handlung ↔ Konsequenz (Preis).</div>
-              </div>
-
-              <div class="pricebox">
-                <div class="pricebox__row">
-                  <span class="muted">Preis p. P.</span>
-                  <span class="mono" id="pricePerPerson">490€</span>
-                </div>
-                <div class="pricebox__row pricebox__row--big">
-                  <span>Gesamt</span>
-                  <span class="mono" id="priceTotal">490€</span>
-                </div>
-              </div>
-
-              <div class="card card--subtle">
-                <div class="muted">
-                  CTA ist <strong>gesperrt</strong>, bis Name & E‑Mail ausgefüllt sind (Constraints).
-                </div>
-              </div>
-            </aside>
-
-            <section class="card booking__main">
-              <div class="progress" aria-label="Buchungsfortschritt">
-                <div class="progress__step progress__step--active" data-step="1">
-                  <span class="progress__num">1</span> Daten
-                </div>
-                <div class="progress__bar" aria-hidden="true"></div>
-                <div class="progress__step" data-step="2">
-                  <span class="progress__num">2</span> Review
-                </div>
-              </div>
-
-              <form id="bookingForm" class="form" novalidate>
-                <div class="step step--active" data-step-panel="1">
-                  <div class="grid-2 grid-2--tight">
-                    <div class="field">
-                      <label class="label" for="name">Name <span class="req">*</span></label>
-                      <input id="name" class="input" type="text" autocomplete="name" />
-                      <div class="error" id="nameError" hidden></div>
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={e => e.stopPropagation()}>
+                        <div className="modal-icon warning">⚠️</div>
+                        <h3 className="modal-title">Buchung bestätigen</h3>
+                        <p className="modal-text">
+                            Sie sind dabei, eine kostenpflichtige Buchung über <strong>{total.toLocaleString('de-DE')}€</strong> abzuschließen. 
+                            Nach der Bestätigung erhalten Sie eine Rechnung per E-Mail.
+                        </p>
+                        <div className="modal-actions">
+                            <button className="btn btn-secondary" onClick={onClose}>
+                                Abbrechen
+                            </button>
+                            <button className="btn btn-primary" onClick={onConfirm}>
+                                Kostenpflichtig buchen
+                            </button>
+                        </div>
                     </div>
-                    <div class="field">
-                      <label class="label" for="email">E‑Mail <span class="req">*</span></label>
-                      <input id="email" class="input" type="email" autocomplete="email" />
-                      <div class="error" id="emailError" hidden></div>
+                </div>
+            );
+        };
+
+        // Success Modal
+        const SuccessModal = ({ isOpen, onClose }) => {
+            if (!isOpen) return null;
+
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={e => e.stopPropagation()}>
+                        <div className="modal-icon success">✓</div>
+                        <h3 className="modal-title">Buchung erfolgreich!</h3>
+                        <p className="modal-text">
+                            Vielen Dank für Ihre Buchung! Sie erhalten in Kürze eine Bestätigung 
+                            sowie alle weiteren Informationen per E-Mail.
+                        </p>
+                        <div className="modal-actions">
+                            <button className="btn btn-primary" onClick={onClose}>
+                                Zur Startseite
+                            </button>
+                        </div>
                     </div>
-                  </div>
+                </div>
+            );
+        };
 
-                  <div class="field">
-                    <label class="label" for="notes">Anmerkungen (optional)</label>
-                    <textarea id="notes" class="input" rows="3" placeholder="z. B. Allergien, Fragen, Wünsche"></textarea>
-                    <div class="hint muted">Positive Rhetorik statt „Ungültig!“ — wir helfen beim Ausfüllen.</div>
-                  </div>
+        // Navigation
+        const Navigation = ({ currentPage, setCurrentPage, cartItems }) => {
+            const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-                  <div class="actions">
-                    <a class="btn btn--ghost" href="#/seminare">Zurück</a>
-                    <button class="btn btn--primary" type="button" id="toReviewBtn" disabled>
-                      Weiter zu Review
+            return (
+                <nav className="nav">
+                    <div className="nav-container">
+                        <div className="nav-logo" onClick={() => setCurrentPage('home')}>
+                            <div className="nav-logo-icon">WP</div>
+                            <span className="nav-logo-text">Wirtschaftspsychologie Akademie</span>
+                        </div>
+                        <div className="nav-links">
+                            <button 
+                                className={`nav-link ${currentPage === 'home' ? 'active' : ''}`}
+                                onClick={() => setCurrentPage('home')}
+                            >
+                                Home
+                            </button>
+                            <button 
+                                className={`nav-link ${currentPage === 'seminars' ? 'active' : ''}`}
+                                onClick={() => setCurrentPage('seminars')}
+                            >
+                                Seminare
+                            </button>
+                        </div>
+                        <button className="nav-cart" onClick={() => setCurrentPage('cart')}>
+                            <span>🛒</span>
+                            <span>Warenkorb</span>
+                            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+                        </button>
+                    </div>
+                </nav>
+            );
+        };
+
+        // Hero Section
+        const Hero = ({ setCurrentPage }) => (
+            <section className="hero">
+                <div className="hero-container">
+                    <div className="hero-content">
+                        <div className="hero-badge">
+                            <span>🎓</span>
+                            <span>Wissenschaftlich fundiert</span>
+                        </div>
+                        <h1 className="hero-title">
+                            Psychologie für <span>bessere Führung</span>
+                        </h1>
+                        <p className="hero-text">
+                            Transformieren Sie Ihre Führungskompetenzen mit evidenzbasierten Methoden 
+                            aus der Wirtschaftspsychologie. Praxisnah, wissenschaftlich fundiert und 
+                            direkt anwendbar.
+                        </p>
+                        <div style={{ display: 'flex', gap: '16px' }}>
+                            <button className="btn btn-primary" onClick={() => setCurrentPage('seminars')}>
+                                Seminare entdecken
+                                <span>→</span>
+                            </button>
+                            <button className="btn btn-ghost" onClick={() => setCurrentPage('about')}>
+                                Mehr erfahren
+                            </button>
+                        </div>
+                        <div className="hero-stats">
+                            <div className="hero-stat">
+                                <div className="hero-stat-number">500+</div>
+                                <div className="hero-stat-label">Zufriedene Teilnehmer</div>
+                            </div>
+                            <div className="hero-stat">
+                                <div className="hero-stat-number">15</div>
+                                <div className="hero-stat-label">Jahre Erfahrung</div>
+                            </div>
+                            <div className="hero-stat">
+                                <div className="hero-stat-number">98%</div>
+                                <div className="hero-stat-label">Weiterempfehlung</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="hero-visual">
+                        <div className="hero-card">
+                            <div className="hero-card-icon">🚀</div>
+                            <h3 className="hero-card-title">Nächstes Seminar</h3>
+                            <p className="hero-card-text">
+                                Mitarbeitermotivation in hybriden Arbeitswelten
+                            </p>
+                            <div className="hero-card-meta">
+                                <div className="hero-card-meta-item">
+                                    <span>📅</span>
+                                    <span>16.01.2026</span>
+                                </div>
+                                <div className="hero-card-meta-item">
+                                    <span>📍</span>
+                                    <span>Stuttgart</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        // Seminar Card
+        const SeminarCard = ({ seminar, onSelect, onAddToCart }) => (
+            <div className={`seminar-card ${seminar.featured ? 'featured' : ''}`}>
+                <div className="seminar-image" onClick={() => onSelect(seminar)}>
+                    {seminar.icon}
+                </div>
+                <div className="seminar-content" onClick={() => onSelect(seminar)}>
+                    <div className="seminar-category">{seminar.category}</div>
+                    <h3 className="seminar-title">{seminar.title}</h3>
+                    <p className="seminar-description">{seminar.description}</p>
+                    <div className="seminar-meta">
+                        <div className="seminar-meta-item">
+                            <span className="seminar-meta-icon">📅</span>
+                            <span>{seminar.date}, {seminar.time}</span>
+                        </div>
+                        <div className="seminar-meta-item">
+                            <span className="seminar-meta-icon">📍</span>
+                            <span>{seminar.room}, Stuttgart</span>
+                        </div>
+                    </div>
+                </div>
+                <div className="seminar-footer">
+                    <div className="seminar-price">
+                        {seminar.price}€
+                        <span className="seminar-price-suffix"> / Person</span>
+                    </div>
+                    <button 
+                        className="btn btn-primary"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onAddToCart(seminar);
+                        }}
+                    >
+                        Buchen
                     </button>
-                  </div>
                 </div>
+            </div>
+        );
 
-                <div class="step" data-step-panel="2" hidden>
-                  <div class="review">
-                    <h2 class="h2">Review</h2>
-                    <div class="card card--subtle">
-                      <div class="kv">
-                        <div class="kv__row">
-                          <div class="kv__k">Seminar</div>
-                          <div class="kv__v" id="reviewCourse">—</div>
-                        </div>
-                        <div class="kv__row">
-                          <div class="kv__k">Teilnehmer</div>
-                          <div class="kv__v" id="reviewParticipants">—</div>
-                        </div>
-                        <div class="kv__row">
-                          <div class="kv__k">Name</div>
-                          <div class="kv__v" id="reviewName">—</div>
-                        </div>
-                        <div class="kv__row">
-                          <div class="kv__k">E‑Mail</div>
-                          <div class="kv__v" id="reviewEmail">—</div>
-                        </div>
-                        <div class="kv__row">
-                          <div class="kv__k">Preis</div>
-                          <div class="kv__v"><strong id="reviewTotal">—</strong></div>
-                        </div>
-                      </div>
+        // Seminars Page
+        const SeminarsPage = ({ onSelectSeminar, onAddToCart }) => (
+            <section className="section">
+                <div className="section-header">
+                    <div className="section-badge">
+                        <span>📚</span>
+                        <span>Seminarprogramm 2026</span>
                     </div>
-
-                    <div class="actions">
-                      <button class="btn btn--ghost" type="button" id="backToDataBtn">Zurück</button>
-                      <button class="btn btn--danger" type="button" id="payBtn">
-                        Kostenpflichtig buchen
-                      </button>
-                    </div>
-
-                    <p class="muted small">
-                      Hinweis: Keine echte Zahlung. Wir simulieren Bestätigung + Ladezustand.
+                    <h2 className="section-title">Unsere Seminare</h2>
+                    <p className="section-subtitle">
+                        Praxisnahe Weiterbildung mit wissenschaftlicher Fundierung – 
+                        für nachhaltige Veränderung in Ihrem Führungsalltag.
                     </p>
-                  </div>
                 </div>
-              </form>
+                <div className="seminars-grid">
+                    {seminars.map(seminar => (
+                        <SeminarCard 
+                            key={seminar.id}
+                            seminar={seminar}
+                            onSelect={onSelectSeminar}
+                            onAddToCart={onAddToCart}
+                        />
+                    ))}
+                </div>
             </section>
-          </div>
-        </section>
+        );
 
-        <!-- 404 -->
-        <section id="view-notfound" class="view" data-view="notfound" hidden>
-          <div class="card">
-            <h1 class="h1">Seite nicht gefunden</h1>
-            <p class="muted">Die Route existiert nicht. Zurück zur Startseite?</p>
-            <a class="btn btn--primary" href="#/home">Home</a>
-          </div>
-        </section>
-      </div>
-    </main>
+        // Seminar Detail Page
+        const SeminarDetail = ({ seminar, onAddToCart, setCurrentPage }) => {
+            const [participants, setParticipants] = useState(1);
+            const nettoPrice = seminar.price * participants;
+            const mwstPrice = nettoPrice * 0.19;
+            const totalPrice = nettoPrice + mwstPrice;
 
-    <!-- CONFIRM MODAL -->
-    <div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" hidden>
-      <div class="modal__backdrop" data-close-modal="true"></div>
-      <div class="modal__panel" role="document">
-        <div class="modal__head">
-          <div class="modal__title" id="confirmTitle">Bitte bestätigen</div>
-          <button class="iconbtn" type="button" aria-label="Schließen" data-close-modal="true">
-            ✕
-          </button>
-        </div>
-        <div class="modal__body">
-          <p class="muted" id="confirmText">
-            —
-          </p>
-          <div class="callout">
-            <strong>Transparenz:</strong> Du bestätigst nur die Demo — keine echte Buchung.
-          </div>
-        </div>
-        <div class="modal__actions">
-          <button class="btn btn--ghost" type="button" id="confirmCancelBtn" data-close-modal="true">
-            Abbrechen
-          </button>
-          <button class="btn btn--primary" type="button" id="confirmOkBtn">
-            Ja, Demo-Buchung auslösen
-          </button>
-        </div>
-      </div>
-    </div>
+            return (
+                <>
+                    <div className="detail-hero">
+                        <div className="detail-hero-container">
+                            <div className="breadcrumb">
+                                <span className="breadcrumb-link" onClick={() => setCurrentPage('home')}>Home</span>
+                                <span>›</span>
+                                <span className="breadcrumb-link" onClick={() => setCurrentPage('seminars')}>Seminare</span>
+                                <span>›</span>
+                                <span>{seminar.title}</span>
+                            </div>
+                            <h1 className="detail-title">{seminar.title}</h1>
+                            <p className="detail-subtitle">{seminar.subtitle}</p>
+                        </div>
+                    </div>
+                    <div className="detail-content">
+                        <div className="detail-main">
+                            <div className="detail-section">
+                                <h2 className="detail-section-title">
+                                    <span className="detail-section-title-icon">🎯</span>
+                                    Lernziele & Inhalte
+                                </h2>
+                                <p style={{ marginBottom: '20px', color: 'var(--gray-700)' }}>
+                                    {seminar.description}
+                                </p>
+                                <ul className="detail-list">
+                                    {seminar.highlights.map((highlight, index) => (
+                                        <li key={index}>
+                                            <span className="detail-list-icon">✓</span>
+                                            <span>{highlight}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
 
-    <!-- LOADING OVERLAY -->
-    <div class="overlay" id="loadingOverlay" aria-hidden="true" hidden>
-      <div class="overlay__panel">
-        <div class="spinner" aria-hidden="true"></div>
-        <div class="overlay__text">
-          <div class="overlay__title">Buchungsanfrage wird gesendet…</div>
-          <div class="muted small">Feedback in &lt; 100ms + Ladeoverlay (simuliert).</div>
-        </div>
-      </div>
-    </div>
+                            {seminar.agenda && (
+                                <div className="detail-section">
+                                    <h2 className="detail-section-title">
+                                        <span className="detail-section-title-icon">📋</span>
+                                        Tagesagenda
+                                    </h2>
+                                    {seminar.agenda.map((item, index) => (
+                                        <div className="agenda-item" key={index}>
+                                            <span className="agenda-time">{item.time}</span>
+                                            <div className="agenda-content">
+                                                <h4>{item.title}</h4>
+                                                <p>{item.desc}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
 
-    <footer class="footer">
-      <div class="container footer__inner">
-        <div class="muted small">
-          © Mockup · Wirtschaftspsychologie · DHBW Stuttgart · Frontend-only
-        </div>
-        <a class="muted small" href="#/home">Nach oben</a>
-      </div>
-    </footer>
+                            {seminar.methods && (
+                                <div className="detail-section">
+                                    <h2 className="detail-section-title">
+                                        <span className="detail-section-title-icon">🛠️</span>
+                                        Methodik
+                                    </h2>
+                                    <p style={{ marginBottom: '16px', color: 'var(--gray-700)' }}>
+                                        Um den Transfer in die Praxis zu sichern, setzen wir auf interaktive Lernformate:
+                                    </p>
+                                    <ul className="detail-list">
+                                        {seminar.methods.map((method, index) => (
+                                            <li key={index}>
+                                                <span className="detail-list-icon">●</span>
+                                                <span>{method}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
 
-    <script src="./app.js?v=2" defer></script>
-  </body>
+                            {seminar.id === 2 && (
+                                <div className="detail-section herzberg-section">
+                                    <h2 className="detail-section-title">
+                                        <span className="detail-section-title-icon">📖</span>
+                                        Theoretische Fundierung: Herzberg-Modell
+                                    </h2>
+                                    <p style={{ color: 'var(--gray-700)' }}>
+                                        Das Zwei-Faktoren-Modell nach Frederick Herzberg bildet die wissenschaftliche 
+                                        Grundlage dieses Seminars. Wir zeigen Ihnen, wie Sie diese Erkenntnisse 
+                                        in der hybriden Arbeitswelt praktisch anwenden.
+                                    </p>
+                                    <div className="herzberg-grid">
+                                        <div className="herzberg-card hygiene">
+                                            <h4 className="herzberg-card-title">
+                                                <span>🏗️</span>
+                                                Hygienefaktoren
+                                            </h4>
+                                            <ul className="herzberg-card-list">
+                                                <li><span>•</span> Technische Infrastruktur</li>
+                                                <li><span>•</span> Home-Office-Ausstattung</li>
+                                                <li><span>•</span> Arbeitsbedingungen</li>
+                                                <li><span>•</span> Vergütung & Benefits</li>
+                                            </ul>
+                                        </div>
+                                        <div className="herzberg-card motivators">
+                                            <h4 className="herzberg-card-title">
+                                                <span>⭐</span>
+                                                Motivatoren
+                                            </h4>
+                                            <ul className="herzberg-card-list">
+                                                <li><span>•</span> Anerkennung & Wertschätzung</li>
+                                                <li><span>•</span> Verantwortung & Autonomie</li>
+                                                <li><span>•</span> Entwicklungsmöglichkeiten</li>
+                                                <li><span>•</span> Sinnhafte Arbeit</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p style={{ marginTop: '20px', color: 'var(--gray-700)', fontStyle: 'italic' }}>
+                                        <strong>Transfer-Frage:</strong> Wie aktiviere ich Motivatoren, wenn Hygienefaktoren 
+                                        räumlich distanziert sind?
+                                    </p>
+                                </div>
+                            )}
+
+                            <div className="detail-section">
+                                <h2 className="detail-section-title">
+                                    <span className="detail-section-title-icon">👤</span>
+                                    Ihr Trainer
+                                </h2>
+                                <div className="trainer-card">
+                                    <div className="trainer-avatar">
+                                        {seminar.trainer.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                                    </div>
+                                    <div className="trainer-info">
+                                        <h4>{seminar.trainer.name}</h4>
+                                        <div className="title">{seminar.trainer.title}</div>
+                                        <p>{seminar.trainer.bio}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="detail-sidebar">
+                            <div className="booking-card">
+                                <div className="booking-price">
+                                    <div className="booking-price-amount">{seminar.price}€</div>
+                                    <div className="booking-price-suffix">pro Person</div>
+                                    <div className="booking-price-info">inkl. Unterlagen & Verpflegung</div>
+                                </div>
+
+                                <div className="booking-details">
+                                    <div className="booking-detail-item">
+                                        <span className="booking-detail-icon">📅</span>
+                                        <div className="booking-detail-text">
+                                            <span className="booking-detail-label">Termin</span>
+                                            {seminar.date}
+                                        </div>
+                                    </div>
+                                    <div className="booking-detail-item">
+                                        <span className="booking-detail-icon">⏰</span>
+                                        <div className="booking-detail-text">
+                                            <span className="booking-detail-label">Uhrzeit</span>
+                                            {seminar.time}
+                                        </div>
+                                    </div>
+                                    <div className="booking-detail-item">
+                                        <span className="booking-detail-icon">📍</span>
+                                        <div className="booking-detail-text">
+                                            <span className="booking-detail-label">Ort</span>
+                                            {seminar.room}, {seminar.location}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="calculator">
+                                    <div className="calculator-title">Preiskalkulator</div>
+                                    <div className="calculator-row">
+                                        <span>Teilnehmer</span>
+                                        <input 
+                                            type="number"
+                                            className="calculator-input"
+                                            value={participants}
+                                            onChange={(e) => setParticipants(Math.max(1, parseInt(e.target.value) || 1))}
+                                            min="1"
+                                            max="20"
+                                        />
+                                    </div>
+                                    <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--gray-300)' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: 'var(--gray-500)', marginBottom: '4px' }}>
+                                            <span>Netto:</span>
+                                            <span>{nettoPrice.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: 'var(--gray-500)', marginBottom: '8px' }}>
+                                            <span>MwSt. (19%):</span>
+                                            <span>{mwstPrice.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '700' }}>
+                                            <span>Gesamt (brutto):</span>
+                                            <span className="calculator-result">{totalPrice.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button 
+                                    className="btn btn-primary booking-btn"
+                                    onClick={() => onAddToCart(seminar, participants)}
+                                >
+                                    In den Warenkorb
+                                </button>
+
+                                <p className="booking-note">
+                                    ✓ Kostenlose Stornierung bis 14 Tage vor Beginn
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        };
+
+        // Cart Page
+        const CartPage = ({ cartItems, updateQuantity, removeItem, setCurrentPage }) => {
+            const [showConfirmModal, setShowConfirmModal] = useState(false);
+            const [showSuccessModal, setShowSuccessModal] = useState(false);
+            const [isLoading, setIsLoading] = useState(false);
+            const [formData, setFormData] = useState({
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                company: '',
+                position: '',
+                street: '',
+                city: '',
+                zip: '',
+                notes: ''
+            });
+            const [errors, setErrors] = useState({});
+
+            // Netto-Berechnung + MwSt.
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.seminar.price * item.quantity), 0);
+            const mwst = subtotal * 0.19;
+            const total = subtotal + mwst;
+
+            const validateForm = () => {
+                const newErrors = {};
+                if (!formData.firstName.trim()) newErrors.firstName = 'Bitte geben Sie Ihren Vornamen ein';
+                if (!formData.lastName.trim()) newErrors.lastName = 'Bitte geben Sie Ihren Nachnamen ein';
+                if (!formData.email.trim()) {
+                    newErrors.email = 'Bitte geben Sie Ihre E-Mail ein, damit wir Ihnen die Unterlagen senden können';
+                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+                    newErrors.email = 'Bitte geben Sie eine gültige E-Mail-Adresse ein (z.B. name@firma.de)';
+                }
+                if (!formData.company.trim()) newErrors.company = 'Bitte geben Sie Ihr Unternehmen ein';
+                // Telefon-Validierung (optional, aber wenn ausgefüllt, nur Zahlen, +, Leerzeichen, -)
+                if (formData.phone.trim() && !/^[\d\s+\-()]+$/.test(formData.phone)) {
+                    newErrors.phone = 'Bitte geben Sie eine gültige Telefonnummer ein (nur Zahlen, +, -, Leerzeichen)';
+                }
+                setErrors(newErrors);
+                return Object.keys(newErrors).length === 0;
+            };
+
+            // Telefon-Input: nur erlaubte Zeichen
+            const handlePhoneChange = (value) => {
+                // Nur Zahlen, +, -, Leerzeichen und Klammern erlauben
+                const cleanedValue = value.replace(/[^\d\s+\-()]/g, '');
+                handleInputChange('phone', cleanedValue);
+            };
+
+            const handleSubmit = () => {
+                const isValid = validateForm();
+                if (isValid) {
+                    setShowConfirmModal(true);
+                } else {
+                    // Scroll zum ersten Fehler
+                    const firstError = document.querySelector('.form-input.error');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        firstError.focus();
+                    }
+                }
+            };
+
+            const handleConfirm = () => {
+                setShowConfirmModal(false);
+                setIsLoading(true);
+                
+                // Simulate booking process
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setShowSuccessModal(true);
+                }, 2000);
+            };
+
+            const handleSuccessClose = () => {
+                setShowSuccessModal(false);
+                // Clear cart and go home
+                cartItems.forEach(item => removeItem(item.seminar.id));
+                setCurrentPage('home');
+            };
+
+            const handleInputChange = (field, value) => {
+                setFormData(prev => ({ ...prev, [field]: value }));
+                if (errors[field]) {
+                    setErrors(prev => ({ ...prev, [field]: null }));
+                }
+            };
+
+            if (cartItems.length === 0) {
+                return (
+                    <div className="cart-container">
+                        <div className="cart-empty animate-fade-in">
+                            <div className="cart-empty-icon">🛒</div>
+                            <h2>Ihr Warenkorb ist leer</h2>
+                            <p className="cart-empty-text">
+                                Entdecken Sie unsere Seminare und starten Sie Ihre Weiterbildung.
+                            </p>
+                            <button className="btn btn-primary" onClick={() => setCurrentPage('seminars')}>
+                                Seminare ansehen
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            // Prüft ob alle Pflichtfelder ausgefüllt und E-Mail gültig ist
+            const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
+            const isFormValid = formData.firstName.trim() && formData.lastName.trim() && formData.email.trim() && isEmailValid && formData.company.trim();
+
+            return (
+                <div className="cart-container">
+                    <div className="cart-header">
+                        <h1 className="cart-title">Warenkorb</h1>
+                    </div>
+
+                    {cartItems.map(item => (
+                        <div className="cart-item" key={item.seminar.id}>
+                            <div className="cart-item-image">{item.seminar.icon}</div>
+                            <div className="cart-item-content">
+                                <h3 className="cart-item-title">{item.seminar.title}</h3>
+                                <div className="cart-item-meta">
+                                    📅 {item.seminar.date} • 📍 {item.seminar.room}
+                                </div>
+                                <div className="cart-item-quantity">
+                                    <button 
+                                        className="quantity-btn"
+                                        onClick={() => updateQuantity(item.seminar.id, item.quantity - 1)}
+                                    >
+                                        −
+                                    </button>
+                                    <span className="quantity-value">{item.quantity}</span>
+                                    <button 
+                                        className="quantity-btn"
+                                        onClick={() => updateQuantity(item.seminar.id, item.quantity + 1)}
+                                    >
+                                        +
+                                    </button>
+                                    <span style={{ marginLeft: '8px', color: 'var(--gray-500)', fontSize: '14px' }}>
+                                        Teilnehmer
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="cart-item-actions">
+                                <div className="cart-item-price">
+                                    {(item.seminar.price * item.quantity).toLocaleString('de-DE')}€
+                                </div>
+                                <span 
+                                    className="cart-item-remove"
+                                    onClick={() => removeItem(item.seminar.id)}
+                                >
+                                    Entfernen
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+
+                    <div className="cart-summary">
+                        <div className="cart-summary-row">
+                            <span className="cart-summary-label">Zwischensumme (netto)</span>
+                            <span className="cart-summary-value">{subtotal.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
+                        </div>
+                        <div className="cart-summary-row">
+                            <span className="cart-summary-label">MwSt. (19%)</span>
+                            <span className="cart-summary-value">{mwst.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
+                        </div>
+                        <div className="cart-summary-row">
+                            <span className="cart-summary-label" style={{ fontSize: '18px', fontWeight: '600', color: 'var(--black)' }}>
+                                Gesamtsumme (brutto)
+                            </span>
+                            <span className="cart-summary-total">{total.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
+                        </div>
+                    </div>
+
+                    <div className="checkout-form">
+                        <div className="form-section">
+                            <h3 className="form-section-title">
+                                <span className="form-section-number">1</span>
+                                Persönliche Daten
+                            </h3>
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label">
+                                        Vorname <span className="required">*</span>
+                                    </label>
+                                    <input 
+                                        type="text"
+                                        className={`form-input ${errors.firstName ? 'error' : ''}`}
+                                        value={formData.firstName}
+                                        onChange={(e) => handleInputChange('firstName', e.target.value)}
+                                        placeholder="Max"
+                                    />
+                                    {errors.firstName && <div className="form-error">{errors.firstName}</div>}
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">
+                                        Nachname <span className="required">*</span>
+                                    </label>
+                                    <input 
+                                        type="text"
+                                        className={`form-input ${errors.lastName ? 'error' : ''}`}
+                                        value={formData.lastName}
+                                        onChange={(e) => handleInputChange('lastName', e.target.value)}
+                                        placeholder="Mustermann"
+                                    />
+                                    {errors.lastName && <div className="form-error">{errors.lastName}</div>}
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">
+                                        E-Mail <span className="required">*</span>
+                                    </label>
+                                    <input 
+                                        type="email"
+                                        className={`form-input ${errors.email ? 'error' : ''}`}
+                                        value={formData.email}
+                                        onChange={(e) => handleInputChange('email', e.target.value)}
+                                        placeholder="max.mustermann@firma.de"
+                                    />
+                                    {errors.email && <div className="form-error">{errors.email}</div>}
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Telefon</label>
+                                    <input 
+                                        type="tel"
+                                        className={`form-input ${errors.phone ? 'error' : ''}`}
+                                        value={formData.phone}
+                                        onChange={(e) => handlePhoneChange(e.target.value)}
+                                        placeholder="+49 711 123456"
+                                    />
+                                    {errors.phone && <div className="form-error">{errors.phone}</div>}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="form-section">
+                            <h3 className="form-section-title">
+                                <span className="form-section-number">2</span>
+                                Unternehmensdaten
+                            </h3>
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label">
+                                        Unternehmen <span className="required">*</span>
+                                    </label>
+                                    <input 
+                                        type="text"
+                                        className={`form-input ${errors.company ? 'error' : ''}`}
+                                        value={formData.company}
+                                        onChange={(e) => handleInputChange('company', e.target.value)}
+                                        placeholder="Muster GmbH"
+                                    />
+                                    {errors.company && <div className="form-error">{errors.company}</div>}
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Position</label>
+                                    <input 
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.position}
+                                        onChange={(e) => handleInputChange('position', e.target.value)}
+                                        placeholder="Teamleiter"
+                                    />
+                                </div>
+                                <div className="form-group full-width">
+                                    <label className="form-label">Straße & Hausnummer</label>
+                                    <input 
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.street}
+                                        onChange={(e) => handleInputChange('street', e.target.value)}
+                                        placeholder="Musterstraße 123"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">PLZ</label>
+                                    <input 
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.zip}
+                                        onChange={(e) => handleInputChange('zip', e.target.value)}
+                                        placeholder="70178"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Stadt</label>
+                                    <input 
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.city}
+                                        onChange={(e) => handleInputChange('city', e.target.value)}
+                                        placeholder="Stuttgart"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="form-section">
+                            <h3 className="form-section-title">
+                                <span className="form-section-number">3</span>
+                                Anmerkungen
+                            </h3>
+                            <div className="form-group">
+                                <label className="form-label">Besondere Wünsche oder Anmerkungen</label>
+                                <textarea 
+                                    className="form-input"
+                                    rows="4"
+                                    value={formData.notes}
+                                    onChange={(e) => handleInputChange('notes', e.target.value)}
+                                    placeholder="Teilen Sie uns gerne mit, wenn Sie besondere Anforderungen haben..."
+                                    style={{ resize: 'vertical' }}
+                                />
+                            </div>
+                        </div>
+
+                        <button 
+                            className="btn btn-primary booking-btn"
+                            onClick={handleSubmit}
+                            disabled={!isFormValid}
+                            style={{ marginTop: '16px' }}
+                        >
+                            Kostenpflichtig buchen – {total.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} € (inkl. MwSt.)
+                        </button>
+
+                        <p style={{ textAlign: 'center', fontSize: '14px', color: 'var(--gray-500)', marginTop: '16px' }}>
+                            Mit der Buchung akzeptieren Sie unsere AGB und Datenschutzbestimmungen.
+                        </p>
+                    </div>
+
+                    <ConfirmModal 
+                        isOpen={showConfirmModal}
+                        onClose={() => setShowConfirmModal(false)}
+                        onConfirm={handleConfirm}
+                        total={total}
+                    />
+
+                    <SuccessModal 
+                        isOpen={showSuccessModal}
+                        onClose={handleSuccessClose}
+                    />
+
+                    {isLoading && <LoadingOverlay text="Buchung wird verarbeitet..." />}
+                </div>
+            );
+        };
+
+        // Footer Component
+        const Footer = ({ setCurrentPage }) => (
+            <footer className="footer">
+                <div className="footer-container">
+                    <div className="footer-grid">
+                        <div className="footer-brand">
+                            <div className="footer-logo">
+                                <div className="footer-logo-icon">WP</div>
+                                <span className="footer-logo-text">Wirtschaftspsychologie Akademie</span>
+                            </div>
+                            <p className="footer-description">
+                                Wissenschaftlich fundierte Weiterbildung für Führungskräfte und HR-Professionals. 
+                                Seit 2010 begleiten wir Unternehmen auf dem Weg zu exzellenter Führung.
+                            </p>
+                            <div className="footer-social">
+                                <span className="footer-social-link">in</span>
+                                <span className="footer-social-link">X</span>
+                                <span className="footer-social-link">▶</span>
+                            </div>
+                        </div>
+                        <div className="footer-column">
+                            <h4>Seminare</h4>
+                            <ul className="footer-links">
+                                <li><button className="footer-link" onClick={() => setCurrentPage('seminars')}>Alle Seminare</button></li>
+                                <li><span className="footer-link">Leadership</span></li>
+                                <li><span className="footer-link">Motivation</span></li>
+                                <li><span className="footer-link">New Work</span></li>
+                            </ul>
+                        </div>
+                        <div className="footer-column">
+                            <h4>Unternehmen</h4>
+                            <ul className="footer-links">
+                                <li><button className="footer-link" onClick={() => setCurrentPage('about')}>Über uns</button></li>
+                                <li><span className="footer-link">Trainer</span></li>
+                                <li><span className="footer-link">Referenzen</span></li>
+                                <li><span className="footer-link">Karriere</span></li>
+                            </ul>
+                        </div>
+                        <div className="footer-column">
+                            <h4>Kontakt</h4>
+                            <div className="footer-contact-item">
+                                <span className="footer-contact-icon">📍</span>
+                                <span>Paulinenstraße 50<br/>70178 Stuttgart</span>
+                            </div>
+                            <div className="footer-contact-item">
+                                <span className="footer-contact-icon">📞</span>
+                                <span>+49 711 123 456 78</span>
+                            </div>
+                            <div className="footer-contact-item">
+                                <span className="footer-contact-icon">✉️</span>
+                                <span>info@wp-akademie.de</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="footer-bottom">
+                        <span className="footer-copyright">
+                            © 2025 Wirtschaftspsychologie Akademie. Alle Rechte vorbehalten.
+                        </span>
+                        <div className="footer-legal">
+                            <button className="footer-legal-link" onClick={() => setCurrentPage('impressum')}>Impressum</button>
+                            <button className="footer-legal-link" onClick={() => setCurrentPage('datenschutz')}>Datenschutz</button>
+                            <button className="footer-legal-link" onClick={() => setCurrentPage('agb')}>AGB</button>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        );
+
+        // About Page
+        const AboutPage = ({ setCurrentPage }) => (
+            <>
+                <div className="about-hero">
+                    <h1>Über die Akademie</h1>
+                    <p>Wissenschaftlich fundiert. Praxisnah. Nachhaltig wirksam.</p>
+                </div>
+                <div className="about-content">
+                    <div className="about-grid">
+                        <div className="about-card">
+                            <div className="about-card-icon">🎓</div>
+                            <h3>Wissenschaftlich fundiert</h3>
+                            <p>Alle Seminare basieren auf aktuellen Erkenntnissen der Wirtschaftspsychologie und Führungsforschung.</p>
+                        </div>
+                        <div className="about-card">
+                            <div className="about-card-icon">🛠️</div>
+                            <h3>Praxisorientiert</h3>
+                            <p>Interaktive Workshops, Fallstudien und Rollenspiele für direkten Transfer in den Arbeitsalltag.</p>
+                        </div>
+                        <div className="about-card">
+                            <div className="about-card-icon">🤝</div>
+                            <h3>Persönlich</h3>
+                            <p>Kleine Gruppen und erfahrene Trainer garantieren individuelle Betreuung und nachhaltigen Lernerfolg.</p>
+                        </div>
+                    </div>
+                    <div className="legal-card">
+                        <h2 style={{ marginTop: 0 }}>Unsere Mission</h2>
+                        <p>
+                            Die Wirtschaftspsychologie Akademie wurde 2010 mit dem Ziel gegründet, wissenschaftliche Erkenntnisse 
+                            der Arbeits- und Organisationspsychologie für die Praxis nutzbar zu machen. Unsere Trainer verbinden 
+                            akademische Expertise mit jahrelanger Erfahrung in der Unternehmensberatung.
+                        </p>
+                        <p>
+                            Wir glauben, dass gute Führung erlernbar ist – und dass jede Investition in Führungskompetenz 
+                            eine Investition in motivierte Mitarbeiter, produktive Teams und nachhaltigen Unternehmenserfolg ist.
+                        </p>
+                        <div style={{ marginTop: '32px' }}>
+                            <button className="btn btn-primary" onClick={() => setCurrentPage('seminars')}>
+                                Seminare entdecken
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </>
+        );
+
+        // Impressum Page
+        const ImpressumPage = () => (
+            <div className="legal-page">
+                <div className="legal-card">
+                    <h1>Impressum</h1>
+                    
+                    <h2>Angaben gemäß § 5 TMG</h2>
+                    <p>
+                        Wirtschaftspsychologie Akademie GmbH<br/>
+                        Paulinenstraße 50<br/>
+                        70178 Stuttgart
+                    </p>
+
+                    <h2>Vertreten durch</h2>
+                    <p>
+                        Geschäftsführer: Prof. Dr. Marcus Weber
+                    </p>
+
+                    <h2>Kontakt</h2>
+                    <p>
+                        Telefon: +49 711 123 456 78<br/>
+                        E-Mail: info@wp-akademie.de
+                    </p>
+
+                    <h2>Registereintrag</h2>
+                    <p>
+                        Eintragung im Handelsregister<br/>
+                        Registergericht: Amtsgericht Stuttgart<br/>
+                        Registernummer: HRB 123456
+                    </p>
+
+                    <h2>Umsatzsteuer-ID</h2>
+                    <p>
+                        Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br/>
+                        DE 123 456 789
+                    </p>
+
+                    <h2>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+                    <p>
+                        Prof. Dr. Marcus Weber<br/>
+                        Paulinenstraße 50<br/>
+                        70178 Stuttgart
+                    </p>
+
+                    <h2>Streitschlichtung</h2>
+                    <p>
+                        Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
+                        https://ec.europa.eu/consumers/odr/. Unsere E-Mail-Adresse finden Sie oben im Impressum.
+                    </p>
+                    <p>
+                        Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer 
+                        Verbraucherschlichtungsstelle teilzunehmen.
+                    </p>
+                </div>
+            </div>
+        );
+
+        // Datenschutz Page
+        const DatenschutzPage = () => (
+            <div className="legal-page">
+                <div className="legal-card">
+                    <h1>Datenschutzerklärung</h1>
+                    
+                    <h2>1. Datenschutz auf einen Blick</h2>
+                    <p>
+                        <strong>Allgemeine Hinweise</strong><br/>
+                        Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen 
+                        Daten passiert, wenn Sie diese Website besuchen.
+                    </p>
+
+                    <h2>2. Datenerfassung auf dieser Website</h2>
+                    <p>
+                        <strong>Wer ist verantwortlich für die Datenerfassung?</strong><br/>
+                        Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten 
+                        können Sie dem Impressum dieser Website entnehmen.
+                    </p>
+                    <p>
+                        <strong>Wie erfassen wir Ihre Daten?</strong><br/>
+                        Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen, z.B. durch Eingabe in 
+                        ein Kontaktformular oder bei der Buchung eines Seminars.
+                    </p>
+
+                    <h2>3. Ihre Rechte</h2>
+                    <p>Sie haben jederzeit das Recht:</p>
+                    <ul>
+                        <li>Auskunft über Ihre gespeicherten Daten zu erhalten</li>
+                        <li>Berichtigung unrichtiger Daten zu verlangen</li>
+                        <li>Löschung Ihrer Daten zu verlangen</li>
+                        <li>Einschränkung der Verarbeitung zu verlangen</li>
+                        <li>Datenübertragbarkeit zu verlangen</li>
+                        <li>Widerspruch gegen die Verarbeitung einzulegen</li>
+                    </ul>
+
+                    <h2>4. Cookies</h2>
+                    <p>
+                        Diese Website verwendet Cookies. Cookies sind kleine Textdateien, die auf Ihrem Endgerät 
+                        gespeichert werden. Sie richten keinen Schaden an. Wir nutzen Cookies, um unser Angebot 
+                        nutzerfreundlich zu gestalten.
+                    </p>
+
+                    <h2>5. Kontakt</h2>
+                    <p>
+                        Bei Fragen zur Erhebung, Verarbeitung oder Nutzung Ihrer personenbezogenen Daten wenden Sie 
+                        sich bitte an:<br/><br/>
+                        Datenschutzbeauftragter<br/>
+                        Wirtschaftspsychologie Akademie GmbH<br/>
+                        E-Mail: datenschutz@wp-akademie.de
+                    </p>
+                </div>
+            </div>
+        );
+
+        // AGB Page
+        const AGBPage = () => (
+            <div className="legal-page">
+                <div className="legal-card">
+                    <h1>Allgemeine Geschäftsbedingungen</h1>
+                    
+                    <h2>§ 1 Geltungsbereich</h2>
+                    <p>
+                        Diese Allgemeinen Geschäftsbedingungen gelten für alle Verträge über Seminar- und 
+                        Schulungsleistungen der Wirtschaftspsychologie Akademie GmbH.
+                    </p>
+
+                    <h2>§ 2 Anmeldung und Vertragsschluss</h2>
+                    <p>
+                        Die Anmeldung zu einem Seminar erfolgt schriftlich, per E-Mail oder über unser Online-Portal. 
+                        Mit der Anmeldung erkennt der Teilnehmer diese AGB an. Der Vertrag kommt mit unserer 
+                        Buchungsbestätigung zustande.
+                    </p>
+
+                    <h2>§ 3 Seminargebühren und Zahlung</h2>
+                    <p>
+                        Die Seminargebühren verstehen sich inklusive Seminarunterlagen, Verpflegung und 
+                        Teilnahmezertifikat. Die Zahlung erfolgt nach Rechnungsstellung innerhalb von 14 Tagen.
+                    </p>
+
+                    <h2>§ 4 Rücktritt und Stornierung</h2>
+                    <ul>
+                        <li>Bis 14 Tage vor Seminarbeginn: Kostenfreie Stornierung</li>
+                        <li>7-14 Tage vor Seminarbeginn: 50% der Seminargebühr</li>
+                        <li>Weniger als 7 Tage: 100% der Seminargebühr</li>
+                    </ul>
+                    <p>
+                        Ein Ersatzteilnehmer kann jederzeit kostenfrei benannt werden.
+                    </p>
+
+                    <h2>§ 5 Absage durch den Veranstalter</h2>
+                    <p>
+                        Wir behalten uns vor, Seminare bei zu geringer Teilnehmerzahl bis 7 Tage vor Beginn 
+                        abzusagen. Bereits gezahlte Gebühren werden vollständig erstattet.
+                    </p>
+
+                    <h2>§ 6 Haftung</h2>
+                    <p>
+                        Die Haftung für leichte Fahrlässigkeit wird ausgeschlossen, soweit keine wesentlichen 
+                        Vertragspflichten verletzt werden. Dies gilt nicht für Schäden aus der Verletzung des 
+                        Lebens, des Körpers oder der Gesundheit.
+                    </p>
+
+                    <h2>§ 7 Schlussbestimmungen</h2>
+                    <p>
+                        Es gilt deutsches Recht. Gerichtsstand ist Stuttgart, sofern der Teilnehmer Kaufmann ist.
+                    </p>
+
+                    <p style={{ marginTop: '32px', color: 'var(--gray-500)', fontSize: '14px' }}>
+                        Stand: Januar 2025
+                    </p>
+                </div>
+            </div>
+        );
+
+        // FAQ Component
+        const FAQSection = () => {
+            const [openIndex, setOpenIndex] = useState(null);
+
+            const faqs = [
+                {
+                    question: "Für wen sind die Seminare geeignet?",
+                    answer: "Unsere Seminare richten sich an Führungskräfte aller Ebenen, HR-Professionals, Teamleiter und angehende Führungskräfte. Auch Unternehmer und Selbstständige, die ihre Führungskompetenzen ausbauen möchten, profitieren von unseren praxisnahen Inhalten."
+                },
+                {
+                    question: "Welche Vorkenntnisse benötige ich?",
+                    answer: "Keine speziellen Vorkenntnisse erforderlich. Unsere Seminare sind so konzipiert, dass sie sowohl für Einsteiger als auch für erfahrene Führungskräfte wertvolle Impulse bieten. Wir passen die Tiefe der Inhalte an die Gruppe an."
+                },
+                {
+                    question: "Wie groß sind die Seminargruppen?",
+                    answer: "Wir arbeiten bewusst mit kleinen Gruppen von maximal 12 Teilnehmern. So garantieren wir eine intensive Betreuung, individuelles Feedback und genügend Raum für Fragen und Diskussionen."
+                },
+                {
+                    question: "Erhalte ich ein Zertifikat?",
+                    answer: "Ja, alle Teilnehmer erhalten nach erfolgreichem Abschluss ein Zertifikat der Wirtschaftspsychologie Akademie. Dieses dokumentiert die behandelten Inhalte und den zeitlichen Umfang des Seminars."
+                },
+                {
+                    question: "Kann ich ein Seminar stornieren?",
+                    answer: "Bis 14 Tage vor Seminarbeginn ist eine kostenfreie Stornierung möglich. Danach fallen anteilige Gebühren an. Alternativ können Sie jederzeit einen Ersatzteilnehmer benennen – kostenfrei."
+                },
+                {
+                    question: "Bieten Sie auch Inhouse-Seminare an?",
+                    answer: "Ja, alle unsere Seminare können auch als Inhouse-Veranstaltung in Ihrem Unternehmen durchgeführt werden. Wir passen die Inhalte individuell an Ihre Bedürfnisse an. Kontaktieren Sie uns für ein unverbindliches Angebot."
+                }
+            ];
+
+            return (
+                <section className="faq-section">
+                    <div className="faq-container">
+                        <div className="section-header">
+                            <div className="section-badge">
+                                <span>❓</span>
+                                <span>Häufige Fragen</span>
+                            </div>
+                            <h2 className="section-title">FAQ</h2>
+                            <p className="section-subtitle">
+                                Hier finden Sie Antworten auf die häufigsten Fragen zu unseren Seminaren.
+                            </p>
+                        </div>
+                        {faqs.map((faq, index) => (
+                            <div 
+                                key={index} 
+                                className={`faq-item ${openIndex === index ? 'open' : ''}`}
+                            >
+                                <div 
+                                    className="faq-question"
+                                    onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                                >
+                                    <span>{faq.question}</span>
+                                    <span className="faq-toggle">+</span>
+                                </div>
+                                <div className="faq-answer">
+                                    {faq.answer}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        };
+
+        // Testimonials Component
+        const TestimonialsSection = () => {
+            const testimonials = [
+                {
+                    name: "Dr. Sabine Müller",
+                    role: "Personalleitung",
+                    company: "Bosch GmbH",
+                    text: "Das Seminar zur Mitarbeitermotivation hat unsere Führungskultur nachhaltig verändert. Die wissenschaftliche Fundierung kombiniert mit praktischen Übungen macht den Unterschied.",
+                    initials: "SM"
+                },
+                {
+                    name: "Michael Schneider",
+                    role: "Geschäftsführer",
+                    company: "Porsche AG",
+                    text: "Exzellente Trainer, die komplexe psychologische Konzepte verständlich vermitteln. Unsere Teamleiter setzen das Gelernte direkt im Alltag um.",
+                    initials: "MS"
+                },
+                {
+                    name: "Julia Hoffmann",
+                    role: "Head of HR",
+                    company: "Mercedes-Benz",
+                    text: "Wir buchen regelmäßig Seminare für unsere Führungskräfte. Die Qualität ist konstant hoch und das Feedback der Teilnehmer durchweg positiv.",
+                    initials: "JH"
+                }
+            ];
+
+            const clientLogos = [
+                "BOSCH", "PORSCHE", "MERCEDES-BENZ", "SAP", "SIEMENS", "BMW"
+            ];
+
+            return (
+                <section className="testimonials-section">
+                    <div className="testimonials-container">
+                        <div className="testimonials-header">
+                            <h2>Das sagen unsere Kunden</h2>
+                            <p>Führende Unternehmen vertrauen auf unsere Expertise</p>
+                        </div>
+                        <div className="testimonials-grid">
+                            {testimonials.map((testimonial, index) => (
+                                <div key={index} className="testimonial-card">
+                                    <div className="testimonial-stars">★★★★★</div>
+                                    <p className="testimonial-text">"{testimonial.text}"</p>
+                                    <div className="testimonial-author">
+                                        <div className="testimonial-avatar">{testimonial.initials}</div>
+                                        <div className="testimonial-info">
+                                            <h4>{testimonial.name}</h4>
+                                            <p>{testimonial.role}</p>
+                                            <span className="testimonial-company">{testimonial.company}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="client-logos">
+                            {clientLogos.map((logo, index) => (
+                                <span key={index} className="client-logo">{logo}</span>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Home Page
+        const HomePage = ({ setCurrentPage, onSelectSeminar, onAddToCart }) => (
+            <>
+                <Hero setCurrentPage={setCurrentPage} />
+                <SeminarsPage onSelectSeminar={onSelectSeminar} onAddToCart={onAddToCart} />
+                <TestimonialsSection />
+                <FAQSection />
+            </>
+        );
+
+        // Main App
+        const App = () => {
+            const [currentPage, setCurrentPage] = useState('home');
+            const [selectedSeminar, setSelectedSeminar] = useState(null);
+            const [cartItems, setCartItems] = useState([]);
+            const [toast, setToast] = useState(null);
+
+            const showToast = (message, type = 'success') => {
+                setToast({ message, type });
+            };
+
+            const addToCart = (seminar, quantity = 1) => {
+                setCartItems(prev => {
+                    const existing = prev.find(item => item.seminar.id === seminar.id);
+                    if (existing) {
+                        return prev.map(item => 
+                            item.seminar.id === seminar.id 
+                                ? { ...item, quantity: item.quantity + quantity }
+                                : item
+                        );
+                    }
+                    return [...prev, { seminar, quantity }];
+                });
+                showToast(`„${seminar.title}" wurde zum Warenkorb hinzugefügt`);
+            };
+
+            const updateQuantity = (seminarId, quantity) => {
+                if (quantity < 1) {
+                    removeItem(seminarId);
+                    return;
+                }
+                setCartItems(prev => 
+                    prev.map(item => 
+                        item.seminar.id === seminarId 
+                            ? { ...item, quantity }
+                            : item
+                    )
+                );
+            };
+
+            const removeItem = (seminarId) => {
+                setCartItems(prev => prev.filter(item => item.seminar.id !== seminarId));
+            };
+
+            const handleSelectSeminar = (seminar) => {
+                setSelectedSeminar(seminar);
+                setCurrentPage('detail');
+            };
+
+            const renderPage = () => {
+                switch (currentPage) {
+                    case 'home':
+                        return (
+                            <HomePage 
+                                setCurrentPage={setCurrentPage}
+                                onSelectSeminar={handleSelectSeminar}
+                                onAddToCart={addToCart}
+                            />
+                        );
+                    case 'seminars':
+                        return (
+                            <section className="section">
+                                <div className="section-header">
+                                    <div className="section-badge">
+                                        <span>📚</span>
+                                        <span>Seminarprogramm 2026</span>
+                                    </div>
+                                    <h2 className="section-title">Alle Seminare</h2>
+                                    <p className="section-subtitle">
+                                        Wählen Sie aus unserem Angebot wissenschaftlich fundierter Weiterbildungen.
+                                    </p>
+                                </div>
+                                <div className="seminars-grid">
+                                    {seminars.map(seminar => (
+                                        <SeminarCard 
+                                            key={seminar.id}
+                                            seminar={seminar}
+                                            onSelect={handleSelectSeminar}
+                                            onAddToCart={addToCart}
+                                        />
+                                    ))}
+                                </div>
+                            </section>
+                        );
+                    case 'detail':
+                        return selectedSeminar ? (
+                            <SeminarDetail 
+                                seminar={selectedSeminar}
+                                onAddToCart={addToCart}
+                                setCurrentPage={setCurrentPage}
+                            />
+                        ) : null;
+                    case 'cart':
+                        return (
+                            <CartPage 
+                                cartItems={cartItems}
+                                updateQuantity={updateQuantity}
+                                removeItem={removeItem}
+                                setCurrentPage={setCurrentPage}
+                            />
+                        );
+                    case 'about':
+                        return <AboutPage setCurrentPage={setCurrentPage} />;
+                    case 'impressum':
+                        return <ImpressumPage />;
+                    case 'datenschutz':
+                        return <DatenschutzPage />;
+                    case 'agb':
+                        return <AGBPage />;
+                    default:
+                        return null;
+                }
+            };
+
+            return (
+                <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                    <Navigation 
+                        currentPage={currentPage}
+                        setCurrentPage={(page) => {
+                            setCurrentPage(page);
+                            if (page !== 'detail') setSelectedSeminar(null);
+                            window.scrollTo(0, 0);
+                        }}
+                        cartItems={cartItems}
+                    />
+                    <main style={{ flex: 1 }}>
+                        {renderPage()}
+                    </main>
+                    <Footer setCurrentPage={(page) => {
+                        setCurrentPage(page);
+                        window.scrollTo(0, 0);
+                    }} />
+                    {toast && (
+                        <Toast 
+                            message={toast.message}
+                            type={toast.type}
+                            onClose={() => setToast(null)}
+                        />
+                    )}
+                </div>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
 </html>
-
-
