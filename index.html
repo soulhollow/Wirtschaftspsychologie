@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trainings-Portal Wirtschaftspsychologie</title>
+    <meta
+      name="description"
+      content="Mockup-Portal: Seminare, Detailseite und Buchungsstrecke (Frontend-only, Funktionen simuliert)."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+    <header class="topbar">
+      <div class="container topbar__inner">
+        <div class="brand" role="banner">
+          <div class="brand__mark" aria-hidden="true">WP</div>
+          <div class="brand__text">
+            <div class="brand__title">Wirtschaftspsychologie</div>
+            <div class="brand__subtitle">Trainings-Portal (Mockup)</div>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="Hauptnavigation">
+          <a class="nav__link" href="#/home" data-route="home">Home</a>
+          <a class="nav__link" href="#/seminare" data-route="seminare">Seminare</a>
+          <a class="nav__link nav__cta" href="#/buchung" data-route="buchung"
+            >Jetzt Platz sichern</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="main" tabindex="-1">
+      <div class="container">
+        <section id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></section>
+
+        <!-- HOME -->
+        <section id="view-home" class="view" data-view="home">
+          <div class="hero">
+            <div class="hero__content">
+              <div class="pill">Seminar-Fokus: Mitarbeitermotivation in hybriden Arbeitswelten</div>
+              <h1 class="h1">
+                Motivation, die bleibt — <span class="accent">hybrid</span> gedacht, praktisch gemacht.
+              </h1>
+              <p class="lead">
+                Frontend-Mockup für eure Prüfungsleistung (DHBW Stuttgart). Alle Funktionen sind
+                simuliert — keine echten Buchungen.
+              </p>
+              <div class="hero__actions">
+                <a class="btn btn--primary" href="#/seminare">Seminare ansehen</a>
+                <a class="btn btn--ghost" href="#/buchung">Buchung testen</a>
+              </div>
+
+              <div class="stats" aria-label="Kurzübersicht">
+                <div class="stat">
+                  <div class="stat__k">3</div>
+                  <div class="stat__v">Kurse im Portfolio</div>
+                </div>
+                <div class="stat">
+                  <div class="stat__k">490€</div>
+                  <div class="stat__v">Best-Value (Anker)</div>
+                </div>
+                <div class="stat">
+                  <div class="stat__k">2</div>
+                  <div class="stat__v">Schritte bis „Buchen“</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero__visual" aria-hidden="true">
+              <div class="visual-card visual-card--focus">
+                <div class="visual-card__title">Fokus</div>
+                <div class="visual-card__desc">Deep Work & Klarheit</div>
+                <div class="sparkline"></div>
+              </div>
+              <div class="visual-card visual-card--synergy">
+                <div class="visual-card__title">Synergie</div>
+                <div class="visual-card__desc">Teammeeting & Alignment</div>
+                <div class="avatars">
+                  <span class="avatar"></span><span class="avatar"></span><span class="avatar"></span>
+                </div>
+              </div>
+              <div class="visual-note">
+                Priming: Bildsprache „Fokus + Synergie“ → Thema hybride Welten.
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <section class="card">
+              <h2 class="h2">Usability: 6 Prinzipien (Don Norman)</h2>
+              <div class="list">
+                <div class="list__item">
+                  <div class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M7 10.5 10 7.5c.7-.7 1.8-.7 2.5 0l3.5 3.5c.7.7.7 1.8 0 2.5l-3 3"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M9.5 16.5H8.2c-1.2 0-2.2-1-2.2-2.2V13"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="list__title">Affordances</div>
+                    <div class="muted">Buttons wirken „klickbar“ (Schatten, Radius 8px).</div>
+                  </div>
+                </div>
+                <div class="list__item">
+                  <div class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M12 21s7-4.4 7-11a7 7 0 1 0-14 0c0 6.6 7 11 7 11Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="list__title">Signifiers</div>
+                    <div class="muted">Icons für Termin & Ort reduzieren Scanning.</div>
+                  </div>
+                </div>
+                <div class="list__item">
+                  <div class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M4 7h16M7 4v6M17 4v6M6 12h12v8H6v-8Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                      />
+                      <path
+                        d="M9 15h2M13 15h2M9 18h2M13 18h2"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="list__title">Mapping</div>
+                    <div class="muted">Preisrechner direkt am Buchungs-CTA.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="callout">
+                <strong>Konzeptmodell:</strong> Navigation folgt dem gelernten Schema
+                <span class="mono">Home → Seminare → Buchung</span>.
+              </div>
+            </section>
+
+            <section class="card">
+              <h2 class="h2">Trainer-Team</h2>
+              <div class="team">
+                <article class="person">
+                  <div class="person__photo" aria-hidden="true"></div>
+                  <div class="person__meta">
+                    <div class="person__name">Amelie Diepenthal</div>
+                    <div class="person__role muted">Trainerin · Autoritätseffekt</div>
+                  </div>
+                </article>
+                <article class="person">
+                  <div class="person__photo person__photo--alt" aria-hidden="true"></div>
+                  <div class="person__meta">
+                    <div class="person__name">Florian Ruffner</div>
+                    <div class="person__role muted">Trainer · Halo-Effekt</div>
+                  </div>
+                </article>
+                <article class="person">
+                  <div class="person__photo person__photo--alt2" aria-hidden="true"></div>
+                  <div class="person__meta">
+                    <div class="person__name">Franziska Schöning</div>
+                    <div class="person__role muted">Trainerin · Praxisfokus</div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="unhappy">
+                <h3 class="h3">Fehlertoleranz („Unhappy Path“)</h3>
+                <p class="muted">
+                  Versehentlich „Kostenpflichtig buchen“? Wir zeigen einen
+                  <strong>Bestätigungsdialog</strong> mit Kerndaten statt harter Fehlermeldungen.
+                </p>
+                <div class="mini-preview">
+                  <button class="btn btn--danger" type="button" id="demoConfirmBtn">
+                    Kostenpflichtig buchen
+                  </button>
+                  <div class="mini-preview__hint muted">
+                    Demo: Öffnet das Modal (keine echte Buchung).
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- SEMINARE -->
+        <section id="view-seminare" class="view" data-view="seminare" hidden>
+          <div class="page-head">
+            <h1 class="h1">Seminar-Portfolio</h1>
+            <p class="muted">
+              Preisgefüge mit Anker/Decoy: <strong>490€</strong> als Best-Value, 520€ als High-Anchor,
+              450€ als Einstieg.
+            </p>
+          </div>
+
+          <div class="portfolio">
+            <article class="course course--highlight" data-course="motivation">
+              <div class="course__top">
+                <div class="course__title">Mitarbeitermotivation (hybrid)</div>
+                <div class="tag tag--best">Best-Value</div>
+              </div>
+              <div class="course__meta">
+                <span class="meta">
+                  <span class="meta__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M7 4v3M17 4v3M4 9h16M6 12h4M6 16h6"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                      />
+                      <path
+                        d="M5.5 7.5h13c.8 0 1.5.7 1.5 1.5v10c0 .8-.7 1.5-1.5 1.5h-13C4.7 20.5 4 19.8 4 19V9c0-.8.7-1.5 1.5-1.5Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                      />
+                    </svg>
+                  </span>
+                  <span>16.01.2026</span>
+                </span>
+                <span class="meta">
+                  <span class="meta__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M12 21s7-4.4 7-11a7 7 0 1 0-14 0c0 6.6 7 11 7 11Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                      />
+                    </svg>
+                  </span>
+                  <span>Paulinenstraße 50 · Raum 208 · Stuttgart</span>
+                </span>
+              </div>
+              <div class="course__bottom">
+                <div class="price">
+                  <div class="price__value">490€</div>
+                  <div class="price__hint muted">pro Teilnehmer</div>
+                </div>
+                <div class="course__actions">
+                  <a class="btn btn--ghost" href="#/detail/motivation">Details</a>
+                  <a class="btn btn--primary" href="#/buchung?course=motivation">Buchen testen</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="course" data-course="fuehrung">
+              <div class="course__top">
+                <div class="course__title">Führung mit Wirkung</div>
+                <div class="tag">High-Anchor</div>
+              </div>
+              <p class="muted">
+                Dient als „High-Anchor“ (520€) — macht 490€ attraktiver.
+              </p>
+              <div class="course__bottom">
+                <div class="price">
+                  <div class="price__value">520€</div>
+                  <div class="price__hint muted">pro Teilnehmer</div>
+                </div>
+                <div class="course__actions">
+                  <button class="btn btn--ghost" type="button" data-toast="Demo: Detailseite nur für Motivation.">
+                    Details
+                  </button>
+                  <a class="btn btn--primary" href="#/buchung?course=fuehrung">Buchen testen</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="course" data-course="gestaltung">
+              <div class="course__top">
+                <div class="course__title">Arbeitsgestaltung</div>
+                <div class="tag tag--light">Einstieg</div>
+              </div>
+              <p class="muted">Einstiegsoption (450€) als Decoy für Preiswahrnehmung.</p>
+              <div class="course__bottom">
+                <div class="price">
+                  <div class="price__value">450€</div>
+                  <div class="price__hint muted">pro Teilnehmer</div>
+                </div>
+                <div class="course__actions">
+                  <button class="btn btn--ghost" type="button" data-toast="Demo: Detailseite nur für Motivation.">
+                    Details
+                  </button>
+                  <a class="btn btn--primary" href="#/buchung?course=gestaltung">Buchen testen</a>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="card card--subtle">
+            <div class="grid-2 grid-2--tight">
+              <div>
+                <h2 class="h2">Farbpsychologie</h2>
+                <ul class="bullets">
+                  <li><strong>Blau</strong>: Vertrauen & Seriosität (Theorie).</li>
+                  <li><strong>Gelb</strong>: Aktion/CTA (Problemlösung).</li>
+                  <li><strong>Schwarz</strong>: Wertigkeit (Headlines/Preis).</li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="h2">Hinweis</h2>
+                <p class="muted">
+                  Dieses Mockup arbeitet vollständig ohne Backend. Formulareingaben werden nur lokal
+                  validiert und „Buchungen“ per Animation/Overlay simuliert.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- DETAIL -->
+        <section id="view-detail-motivation" class="view" data-view="detail-motivation" hidden>
+          <div class="page-head">
+            <div class="breadcrumbs">
+              <a href="#/home">Home</a>
+              <span aria-hidden="true">/</span>
+              <a href="#/seminare">Seminare</a>
+              <span aria-hidden="true">/</span>
+              <span>Detail</span>
+            </div>
+            <h1 class="h1">Mitarbeitermotivation in hybriden Arbeitswelten</h1>
+            <p class="muted">
+              Psychologisch fundiert, praxisnah umgesetzt — mit Fokus auf Herzbergs Zwei‑Faktor‑Theorie.
+            </p>
+          </div>
+
+          <div class="detail">
+            <section class="card">
+              <h2 class="h2">Agenda (Auszug)</h2>
+              <ol class="steps">
+                <li>
+                  <div class="steps__title">Warm-up: Priming & Erwartung</div>
+                  <div class="muted">Bildsprache „Fokus + Synergie“, Zielbild hybrider Zusammenarbeit.</div>
+                </li>
+                <li>
+                  <div class="steps__title">Theorie: Herzberg</div>
+                  <div class="muted">Hygienefaktoren vs. Motivatoren — was hält wirklich langfristig?</div>
+                </li>
+                <li>
+                  <div class="steps__title">Praxis: Remote-Motivatoren aktivieren</div>
+                  <div class="muted">Anerkennung, Verantwortung, Autonomie — in Distanz wirksam gestalten.</div>
+                </li>
+              </ol>
+            </section>
+
+            <section class="card">
+              <h2 class="h2">Ort & Termin</h2>
+              <div class="kv">
+                <div class="kv__row">
+                  <div class="kv__k">Termin</div>
+                  <div class="kv__v">16.01.2026</div>
+                </div>
+                <div class="kv__row">
+                  <div class="kv__k">Ort</div>
+                  <div class="kv__v">Paulinenstraße 50, Stuttgart</div>
+                </div>
+                <div class="kv__row">
+                  <div class="kv__k">Raum</div>
+                  <div class="kv__v">208</div>
+                </div>
+                <div class="kv__row">
+                  <div class="kv__k">Preis</div>
+                  <div class="kv__v"><strong>490€</strong> pro Teilnehmer</div>
+                </div>
+              </div>
+              <div class="detail__actions">
+                <a class="btn btn--primary" href="#/buchung?course=motivation">Buchung starten</a>
+                <a class="btn btn--ghost" href="#/seminare">Zurück zum Portfolio</a>
+              </div>
+            </section>
+
+            <section class="card">
+              <h2 class="h2">Herzberg: Zwei‑Faktor‑Theorie</h2>
+              <div class="grid-2 grid-2--tight">
+                <div class="subcard">
+                  <div class="subcard__title">Hygienefaktoren</div>
+                  <ul class="bullets">
+                    <li>Technik & Infrastruktur (hybrid).</li>
+                    <li>Home‑Office‑Pauschale / Rahmenbedingungen.</li>
+                  </ul>
+                  <p class="muted">
+                    Verhindern Unzufriedenheit — motivieren aber nicht automatisch.
+                  </p>
+                </div>
+                <div class="subcard">
+                  <div class="subcard__title">Motivatoren</div>
+                  <ul class="bullets">
+                    <li>Anerkennung & Feedback.</li>
+                    <li>Verantwortung, Autonomie, Sinn.</li>
+                  </ul>
+                  <p class="muted">
+                    Erzeugen echte Zufriedenheit — besonders wichtig in Remote-Teams.
+                  </p>
+                </div>
+              </div>
+              <div class="callout">
+                <strong>Transferleistung:</strong> Führungskräfte lernen, Motivatoren aktiv zu gestalten,
+                wenn Hygienefaktoren räumlich distanziert sind.
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- BUCHUNG -->
+        <section id="view-buchung" class="view" data-view="buchung" hidden>
+          <div class="page-head">
+            <h1 class="h1">Buchung</h1>
+            <p class="muted">2‑Schritt‑Prozess: Daten eingeben → Review & Bestätigung (simuliert).</p>
+          </div>
+
+          <div class="booking">
+            <aside class="card booking__side">
+              <h2 class="h2">Preisrechner</h2>
+              <div class="field">
+                <label class="label" for="courseSelect">Seminar</label>
+                <select id="courseSelect" class="input">
+                  <option value="motivation">Mitarbeitermotivation (490€)</option>
+                  <option value="fuehrung">Führung mit Wirkung (520€)</option>
+                  <option value="gestaltung">Arbeitsgestaltung (450€)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="label" for="participants">Teilnehmeranzahl</label>
+                <div class="stepper">
+                  <button class="stepper__btn" type="button" id="decParticipants" aria-label="Teilnehmer reduzieren">−</button>
+                  <input
+                    id="participants"
+                    class="input input--center"
+                    type="number"
+                    min="1"
+                    max="30"
+                    value="1"
+                    inputmode="numeric"
+                    aria-describedby="participantsHint"
+                  />
+                  <button class="stepper__btn" type="button" id="incParticipants" aria-label="Teilnehmer erhöhen">+</button>
+                </div>
+                <div id="participantsHint" class="hint muted">Mapping: Handlung ↔ Konsequenz (Preis).</div>
+              </div>
+
+              <div class="pricebox">
+                <div class="pricebox__row">
+                  <span class="muted">Preis p. P.</span>
+                  <span class="mono" id="pricePerPerson">490€</span>
+                </div>
+                <div class="pricebox__row pricebox__row--big">
+                  <span>Gesamt</span>
+                  <span class="mono" id="priceTotal">490€</span>
+                </div>
+              </div>
+
+              <div class="card card--subtle">
+                <div class="muted">
+                  CTA ist <strong>gesperrt</strong>, bis Name & E‑Mail ausgefüllt sind (Constraints).
+                </div>
+              </div>
+            </aside>
+
+            <section class="card booking__main">
+              <div class="progress" aria-label="Buchungsfortschritt">
+                <div class="progress__step progress__step--active" data-step="1">
+                  <span class="progress__num">1</span> Daten
+                </div>
+                <div class="progress__bar" aria-hidden="true"></div>
+                <div class="progress__step" data-step="2">
+                  <span class="progress__num">2</span> Review
+                </div>
+              </div>
+
+              <form id="bookingForm" class="form" novalidate>
+                <div class="step step--active" data-step-panel="1">
+                  <div class="grid-2 grid-2--tight">
+                    <div class="field">
+                      <label class="label" for="name">Name <span class="req">*</span></label>
+                      <input id="name" class="input" type="text" autocomplete="name" />
+                      <div class="error" id="nameError" hidden></div>
+                    </div>
+                    <div class="field">
+                      <label class="label" for="email">E‑Mail <span class="req">*</span></label>
+                      <input id="email" class="input" type="email" autocomplete="email" />
+                      <div class="error" id="emailError" hidden></div>
+                    </div>
+                  </div>
+
+                  <div class="field">
+                    <label class="label" for="notes">Anmerkungen (optional)</label>
+                    <textarea id="notes" class="input" rows="3" placeholder="z. B. Allergien, Fragen, Wünsche"></textarea>
+                    <div class="hint muted">Positive Rhetorik statt „Ungültig!“ — wir helfen beim Ausfüllen.</div>
+                  </div>
+
+                  <div class="actions">
+                    <a class="btn btn--ghost" href="#/seminare">Zurück</a>
+                    <button class="btn btn--primary" type="button" id="toReviewBtn" disabled>
+                      Weiter zu Review
+                    </button>
+                  </div>
+                </div>
+
+                <div class="step" data-step-panel="2" hidden>
+                  <div class="review">
+                    <h2 class="h2">Review</h2>
+                    <div class="card card--subtle">
+                      <div class="kv">
+                        <div class="kv__row">
+                          <div class="kv__k">Seminar</div>
+                          <div class="kv__v" id="reviewCourse">—</div>
+                        </div>
+                        <div class="kv__row">
+                          <div class="kv__k">Teilnehmer</div>
+                          <div class="kv__v" id="reviewParticipants">—</div>
+                        </div>
+                        <div class="kv__row">
+                          <div class="kv__k">Name</div>
+                          <div class="kv__v" id="reviewName">—</div>
+                        </div>
+                        <div class="kv__row">
+                          <div class="kv__k">E‑Mail</div>
+                          <div class="kv__v" id="reviewEmail">—</div>
+                        </div>
+                        <div class="kv__row">
+                          <div class="kv__k">Preis</div>
+                          <div class="kv__v"><strong id="reviewTotal">—</strong></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="actions">
+                      <button class="btn btn--ghost" type="button" id="backToDataBtn">Zurück</button>
+                      <button class="btn btn--danger" type="button" id="payBtn">
+                        Kostenpflichtig buchen
+                      </button>
+                    </div>
+
+                    <p class="muted small">
+                      Hinweis: Keine echte Zahlung. Wir simulieren Bestätigung + Ladezustand.
+                    </p>
+                  </div>
+                </div>
+              </form>
+            </section>
+          </div>
+        </section>
+
+        <!-- 404 -->
+        <section id="view-notfound" class="view" data-view="notfound" hidden>
+          <div class="card">
+            <h1 class="h1">Seite nicht gefunden</h1>
+            <p class="muted">Die Route existiert nicht. Zurück zur Startseite?</p>
+            <a class="btn btn--primary" href="#/home">Home</a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- CONFIRM MODAL -->
+    <div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" hidden>
+      <div class="modal__backdrop" data-close-modal="true"></div>
+      <div class="modal__panel" role="document">
+        <div class="modal__head">
+          <div class="modal__title" id="confirmTitle">Bitte bestätigen</div>
+          <button class="iconbtn" type="button" aria-label="Schließen" data-close-modal="true">
+            ✕
+          </button>
+        </div>
+        <div class="modal__body">
+          <p class="muted" id="confirmText">
+            —
+          </p>
+          <div class="callout">
+            <strong>Transparenz:</strong> Du bestätigst nur die Demo — keine echte Buchung.
+          </div>
+        </div>
+        <div class="modal__actions">
+          <button class="btn btn--ghost" type="button" id="confirmCancelBtn" data-close-modal="true">
+            Abbrechen
+          </button>
+          <button class="btn btn--primary" type="button" id="confirmOkBtn">
+            Ja, Demo-Buchung auslösen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOADING OVERLAY -->
+    <div class="overlay" id="loadingOverlay" aria-hidden="true" hidden>
+      <div class="overlay__panel">
+        <div class="spinner" aria-hidden="true"></div>
+        <div class="overlay__text">
+          <div class="overlay__title">Buchungsanfrage wird gesendet…</div>
+          <div class="muted small">Feedback in &lt; 100ms + Ladeoverlay (simuliert).</div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div class="muted small">
+          © Mockup · Wirtschaftspsychologie · DHBW Stuttgart · Frontend-only
+        </div>
+        <a class="muted small" href="#/home">Nach oben</a>
+      </div>
+    </footer>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
+
+
