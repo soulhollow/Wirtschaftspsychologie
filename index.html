@@ -675,6 +675,91 @@
             color: var(--gray-500);
         }
 
+        .seminar-price-original {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--gray-400);
+            text-decoration: line-through;
+            margin-right: 8px;
+        }
+
+        .discount-timer {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .discount-timer-icon {
+            font-size: 16px;
+        }
+
+        .spots-banner {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .spots-banner-icon {
+            font-size: 20px;
+        }
+
+        .form-error-summary {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 1px solid #fecaca;
+            border-left: 4px solid #dc2626;
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .form-error-summary h4 {
+            color: #dc2626;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-error-summary ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #991b1b;
+            font-size: 14px;
+        }
+
+        .form-error-summary li {
+            margin: 4px 0;
+        }
+
         /* Detail Page */
         .detail-hero {
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
@@ -2049,6 +2134,8 @@
                 description: "Erfahren Sie, wie Sie die Motivation Ihrer Mitarbeiter auch über Distanz hinweg steigern und nachhaltig aufrechterhalten können.",
                 category: "Motivation",
                 price: 490,
+                originalPrice: 590,
+                spotsLeft: 10,
                 date: "16.01.2026",
                 time: "09:00 – 16:00 Uhr",
                 location: "Paulinenstraße 50, 70178 Stuttgart",
@@ -2284,6 +2371,49 @@
             </section>
         );
 
+        // Countdown Timer Hook
+        const useCountdownTimer = () => {
+            const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+            
+            useEffect(() => {
+                // Timer läuft bis Mitternacht
+                const calculateTimeLeft = () => {
+                    const now = new Date();
+                    const endOfDay = new Date(now);
+                    endOfDay.setHours(23, 59, 59, 999);
+                    const diff = endOfDay - now;
+                    
+                    return {
+                        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+                        minutes: Math.floor((diff / (1000 * 60)) % 60),
+                        seconds: Math.floor((diff / 1000) % 60)
+                    };
+                };
+                
+                setTimeLeft(calculateTimeLeft());
+                const timer = setInterval(() => {
+                    setTimeLeft(calculateTimeLeft());
+                }, 1000);
+                
+                return () => clearInterval(timer);
+            }, []);
+            
+            return timeLeft;
+        };
+
+        // Discount Timer Component
+        const DiscountTimer = () => {
+            const { hours, minutes, seconds } = useCountdownTimer();
+            const pad = (n) => n.toString().padStart(2, '0');
+            
+            return (
+                <div className="discount-timer">
+                    <span className="discount-timer-icon">⏰</span>
+                    <span>Angebot endet in: {pad(hours)}:{pad(minutes)}:{pad(seconds)}</span>
+                </div>
+            );
+        };
+
         // Seminar Card
         const SeminarCard = ({ seminar, onSelect, onAddToCart }) => (
             <div className={`seminar-card ${seminar.featured ? 'featured' : ''}`}>
@@ -2304,9 +2434,17 @@
                             <span>{seminar.room}, Stuttgart</span>
                         </div>
                     </div>
+                    {seminar.featured && seminar.originalPrice && (
+                        <div style={{ marginTop: '12px' }}>
+                            <DiscountTimer />
+                        </div>
+                    )}
                 </div>
                 <div className="seminar-footer">
                     <div className="seminar-price">
+                        {seminar.originalPrice && (
+                            <span className="seminar-price-original">{seminar.originalPrice}€</span>
+                        )}
                         {seminar.price}€
                         <span className="seminar-price-suffix"> / Person zzgl. MwSt.</span>
                     </div>
@@ -2494,10 +2632,45 @@
 
                         <div className="detail-sidebar">
                             <div className="booking-card">
+                                {/* Plätze-Banner */}
+                                {seminar.spotsLeft && (
+                                    <div className="spots-banner">
+                                        <span className="spots-banner-icon">🔥</span>
+                                        <span>Nur noch {seminar.spotsLeft} Plätze frei!</span>
+                                    </div>
+                                )}
+                                
                                 <div className="booking-price">
+                                    {seminar.originalPrice && (
+                                        <div style={{ marginBottom: '4px' }}>
+                                            <span style={{ 
+                                                fontSize: '18px', 
+                                                color: 'var(--gray-400)', 
+                                                textDecoration: 'line-through' 
+                                            }}>
+                                                {seminar.originalPrice}€
+                                            </span>
+                                            <span style={{ 
+                                                background: '#dc2626', 
+                                                color: 'white', 
+                                                padding: '2px 8px', 
+                                                borderRadius: '4px', 
+                                                fontSize: '12px', 
+                                                fontWeight: '600',
+                                                marginLeft: '8px'
+                                            }}>
+                                                -{Math.round((1 - seminar.price / seminar.originalPrice) * 100)}% RABATT
+                                            </span>
+                                        </div>
+                                    )}
                                     <div className="booking-price-amount">{seminar.price}€</div>
                                     <div className="booking-price-suffix">pro Person zzgl. MwSt.</div>
                                     <div className="booking-price-info">inkl. Unterlagen & Verpflegung</div>
+                                    {seminar.featured && seminar.originalPrice && (
+                                        <div style={{ marginTop: '12px' }}>
+                                            <DiscountTimer />
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="booking-details">
@@ -2877,6 +3050,23 @@
                     </div>
 
                     <div className="checkout-form">
+                        {/* Fehlermeldungs-Zusammenfassung */}
+                        {Object.keys(errors).length > 0 && (
+                            <div className="form-error-summary">
+                                <h4>
+                                    <span>⚠️</span>
+                                    Bitte korrigieren Sie folgende Eingaben:
+                                </h4>
+                                <ul>
+                                    {errors.firstName && <li>{errors.firstName}</li>}
+                                    {errors.lastName && <li>{errors.lastName}</li>}
+                                    {errors.email && <li>{errors.email}</li>}
+                                    {errors.phone && <li>{errors.phone}</li>}
+                                    {errors.company && <li>{errors.company}</li>}
+                                </ul>
+                            </div>
+                        )}
+                        
                         <div className="form-section">
                             <h3 className="form-section-title">
                                 <span className="form-section-number">1</span>
