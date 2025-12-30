@@ -259,14 +259,26 @@
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.1);
+            gap: 12px;
+            background: rgba(255,255,255,0.15);
             backdrop-filter: blur(10px);
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 50px;
             font-size: 14px;
             margin-bottom: 24px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .hero-badge span:first-child {
+            font-size: 22px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            background: rgba(255, 255, 255, 0.2);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .hero-title {
@@ -533,7 +545,7 @@
             box-shadow: 0 0 20px rgba(250, 204, 21, 0.4), 0 0 40px rgba(250, 204, 21, 0.2), var(--shadow-xl);
             z-index: 10;
             animation: cardGlow 2s ease-in-out infinite;
-            overflow: visible;
+            border-radius: var(--radius-lg);
         }
 
         .seminar-card.featured:hover {
@@ -570,11 +582,16 @@
         }
 
         .seminar-card.featured .seminar-footer {
-            background: var(--accent-yellow);
+            background: var(--white);
+            border-top: 2px solid var(--accent-yellow);
         }
 
         .seminar-card.featured .seminar-price {
             color: var(--black);
+        }
+
+        .seminar-card.featured .btn-primary {
+            box-shadow: 0 2px 0 var(--accent-yellow-dark), 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .seminar-image {
@@ -587,6 +604,7 @@
             font-size: 48px;
             position: relative;
             overflow: hidden;
+            border-radius: var(--radius-lg);
         }
 
         .seminar-image::after {
@@ -686,14 +704,15 @@
         .discount-timer {
             background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
             color: white;
-            padding: 8px 16px;
+            padding: 10px 18px;
             border-radius: var(--radius-md);
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
         }
 
         @keyframes pulse {
@@ -702,25 +721,44 @@
         }
 
         .discount-timer-icon {
-            font-size: 16px;
+            font-size: 22px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.25);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .spots-banner {
             background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
             color: white;
-            padding: 12px 20px;
+            padding: 14px 22px;
             border-radius: var(--radius-md);
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 20px;
             animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
         }
 
         .spots-banner-icon {
-            font-size: 20px;
+            font-size: 24px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.25);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .form-error-summary {
@@ -837,14 +875,17 @@
         }
 
         .detail-section-title-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--primary-blue);
-            color: var(--white);
-            border-radius: var(--radius-sm);
+            width: 44px;
+            height: 44px;
+            background: var(--white);
+            color: var(--primary-blue);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            border: 2px solid var(--primary-blue);
         }
 
         .detail-list {
@@ -873,6 +914,13 @@
             justify-content: center;
             flex-shrink: 0;
             margin-top: 2px;
+        }
+
+        .detail-list.methodology .detail-list-icon {
+            background: transparent;
+            color: var(--primary-blue);
+            font-size: 20px;
+            font-weight: 700;
         }
 
         .agenda-item {
@@ -1091,6 +1139,16 @@
             color: var(--white);
             font-size: 32px;
             flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item-image:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
         .cart-item-content {
@@ -1102,6 +1160,12 @@
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 8px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .cart-item-title:hover {
+            color: var(--primary-blue);
         }
 
         .cart-item-meta {
@@ -2557,10 +2621,10 @@
                                     <p style={{ marginBottom: '16px', color: 'var(--gray-700)' }}>
                                         Um den Transfer in die Praxis zu sichern, setzen wir auf interaktive Lernformate:
                                     </p>
-                                    <ul className="detail-list">
+                                    <ul className="detail-list methodology">
                                         {seminar.methods.map((method, index) => (
                                             <li key={index}>
-                                                <span className="detail-list-icon">●</span>
+                                                <span className="detail-list-icon">–</span>
                                                 <span>{method}</span>
                                             </li>
                                         ))}
@@ -2745,7 +2809,7 @@
         };
 
         // Cart Page
-        const CartPage = ({ cartItems, updateQuantity, removeItem, setCurrentPage, seminars = [], onAddToCart }) => {
+        const CartPage = ({ cartItems, updateQuantity, removeItem, setCurrentPage, seminars = [], onAddToCart, onSelectSeminar }) => {
             const [showConfirmModal, setShowConfirmModal] = useState(false);
             const [showSuccessModal, setShowSuccessModal] = useState(false);
             const [isLoading, setIsLoading] = useState(false);
@@ -2954,9 +3018,29 @@
 
                     {cartItems.map(item => (
                         <div className="cart-item" key={item.seminar.id}>
-                            <div className="cart-item-image">{item.seminar.icon}</div>
+                            <div 
+                                className="cart-item-image" 
+                                onClick={() => {
+                                    if (onSelectSeminar) {
+                                        onSelectSeminar(item.seminar);
+                                    }
+                                }}
+                                title="Seminar-Details anzeigen"
+                            >
+                                {item.seminar.icon}
+                            </div>
                             <div className="cart-item-content">
-                                <h3 className="cart-item-title">{item.seminar.title}</h3>
+                                <h3 
+                                    className="cart-item-title"
+                                    onClick={() => {
+                                        if (onSelectSeminar) {
+                                            onSelectSeminar(item.seminar);
+                                        }
+                                    }}
+                                    title="Seminar-Details anzeigen"
+                                >
+                                    {item.seminar.title}
+                                </h3>
                                 <div className="cart-item-meta">
                                     📅 {item.seminar.date} • 📍 {item.seminar.room}
                                 </div>
@@ -3765,6 +3849,7 @@
                                 setCurrentPage={setCurrentPage}
                                 seminars={seminars}
                                 onAddToCart={addToCart}
+                                onSelectSeminar={handleSelectSeminar}
                             />
                         );
                     case 'about':
