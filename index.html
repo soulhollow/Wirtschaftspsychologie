@@ -270,11 +270,11 @@
         }
 
         .hero-badge span:first-child {
-            font-size: 22px;
+            font-size: 24px;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
             background: rgba(255, 255, 255, 0.2);
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
@@ -546,6 +546,7 @@
             z-index: 10;
             animation: cardGlow 2s ease-in-out infinite;
             border-radius: var(--radius-lg);
+            overflow: visible; /* Badge darf über den Rahmen hinausragen */
         }
 
         .seminar-card.featured:hover {
@@ -564,10 +565,11 @@
             border-radius: 50px;
             font-size: 13px;
             font-weight: 700;
-            z-index: 2;
+            z-index: 30;
             box-shadow: var(--shadow-md);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            pointer-events: none;
         }
 
         @keyframes cardGlow {
@@ -582,7 +584,7 @@
         }
 
         .seminar-card.featured .seminar-footer {
-            background: var(--white);
+            background: var(--gray-100);
             border-top: 2px solid var(--accent-yellow);
         }
 
@@ -601,7 +603,8 @@
             align-items: center;
             justify-content: center;
             color: var(--white);
-            font-size: 48px;
+            font-size: 64px;
+            line-height: 1;
             position: relative;
             overflow: hidden;
             border-radius: var(--radius-lg);
@@ -664,12 +667,13 @@
         }
 
         .seminar-meta-icon {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--primary-blue);
+            font-size: 16px;
         }
 
         .seminar-footer {
@@ -721,13 +725,13 @@
         }
 
         .discount-timer-icon {
-            font-size: 22px;
+            font-size: 24px;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
             display: inline-flex;
             align-items: center;
             background: rgba(255, 255, 255, 0.25);
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             justify-content: center;
             flex-shrink: 0;
@@ -749,13 +753,13 @@
         }
 
         .spots-banner-icon {
-            font-size: 24px;
+            font-size: 26px;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
             display: inline-flex;
             align-items: center;
             background: rgba(255, 255, 255, 0.25);
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             justify-content: center;
             flex-shrink: 0;
@@ -875,15 +879,15 @@
         }
 
         .detail-section-title-icon {
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             background: var(--white);
             color: var(--primary-blue);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 24px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             border: 2px solid var(--primary-blue);
         }
@@ -1007,9 +1011,14 @@
         }
 
         .booking-detail-icon {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             color: var(--primary-blue);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            line-height: 1;
         }
 
         .booking-detail-text {
@@ -1078,6 +1087,23 @@
             font-size: 13px;
             color: var(--gray-500);
             margin-top: 16px;
+        }
+
+        .booking-legal-link {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            color: var(--primary-blue);
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .booking-legal-link:hover {
+            color: var(--primary-blue-dark);
         }
 
         /* Cart Page */
@@ -1485,6 +1511,11 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .herzberg-card-title span:first-child {
+            font-size: 22px;
+            line-height: 1;
         }
 
         .herzberg-card-list {
@@ -2069,7 +2100,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 30px;
             margin: 0 auto 20px;
         }
 
@@ -2594,23 +2625,22 @@
                                 </ul>
                             </div>
 
-                            {seminar.agenda && (
-                                <div className="detail-section">
-                                    <h2 className="detail-section-title">
-                                        <span className="detail-section-title-icon">📋</span>
-                                        Tagesagenda
-                                    </h2>
-                                    {seminar.agenda.map((item, index) => (
-                                        <div className="agenda-item" key={index}>
-                                            <span className="agenda-time">{item.time}</span>
-                                            <div className="agenda-content">
-                                                <h4>{item.title}</h4>
-                                                <p>{item.desc}</p>
-                                            </div>
-                                        </div>
-                                    ))}
+                            <div className="detail-section">
+                                <h2 className="detail-section-title">
+                                    <span className="detail-section-title-icon">👤</span>
+                                    Ihr Trainer
+                                </h2>
+                                <div className="trainer-card">
+                                    <div className="trainer-avatar">
+                                        {seminar.trainer.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                                    </div>
+                                    <div className="trainer-info">
+                                        <h4>{seminar.trainer.name}</h4>
+                                        <div className="title">{seminar.trainer.title}</div>
+                                        <p>{seminar.trainer.bio}</p>
+                                    </div>
                                 </div>
-                            )}
+                            </div>
 
                             {seminar.methods && (
                                 <div className="detail-section">
@@ -2676,22 +2706,23 @@
                                 </div>
                             )}
 
-                            <div className="detail-section">
-                                <h2 className="detail-section-title">
-                                    <span className="detail-section-title-icon">👤</span>
-                                    Ihr Trainer
-                                </h2>
-                                <div className="trainer-card">
-                                    <div className="trainer-avatar">
-                                        {seminar.trainer.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                                    </div>
-                                    <div className="trainer-info">
-                                        <h4>{seminar.trainer.name}</h4>
-                                        <div className="title">{seminar.trainer.title}</div>
-                                        <p>{seminar.trainer.bio}</p>
-                                    </div>
+                            {seminar.agenda && (
+                                <div className="detail-section">
+                                    <h2 className="detail-section-title">
+                                        <span className="detail-section-title-icon">📋</span>
+                                        Tagesagenda
+                                    </h2>
+                                    {seminar.agenda.map((item, index) => (
+                                        <div className="agenda-item" key={index}>
+                                            <span className="agenda-time">{item.time}</span>
+                                            <div className="agenda-content">
+                                                <h4>{item.title}</h4>
+                                                <p>{item.desc}</p>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            </div>
+                            )}
                         </div>
 
                         <div className="detail-sidebar">
@@ -3300,8 +3331,15 @@
                             Kostenpflichtig buchen – {total.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} € (inkl. MwSt.)
                         </button>
 
-                        <p style={{ textAlign: 'center', fontSize: '14px', color: 'var(--gray-500)', marginTop: '16px' }}>
-                            Mit der Buchung akzeptieren Sie unsere AGB und Datenschutzbestimmungen.
+                        <p className="booking-note">
+                            Mit der Buchung akzeptieren Sie unsere{' '}
+                            <button type="button" className="booking-legal-link" onClick={() => setCurrentPage('agb')}>
+                                AGB
+                            </button>{' '}
+                            und{' '}
+                            <button type="button" className="booking-legal-link" onClick={() => setCurrentPage('datenschutz')}>
+                                Datenschutzbestimmungen
+                            </button>.
                         </p>
                     </div>
 
